@@ -3,21 +3,23 @@ using System.Net;
 using System.Net.Sockets;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using Networking;
 using UnityEngine;
 
-public class TestClient : MonoBehaviour, INetEventListener
+public class Client : MonoBehaviour, INetEventListener
 {
     private NetManager _netManager;
-    
+    private NetPeer _server;
     private NetDataWriter _dataWriter;
-    private NetDataReader _dataReader;
+    private NetPacketProcessor _packetProcessor;
 
-    private void Start()
+    private void Awake()
     {
         StartClient();
 
         _dataWriter = new NetDataWriter();
-        _dataReader = new NetDataReader();
+        _packetProcessor = new NetPacketProcessor();
+        NetDataExtensions.RegisterDataTypes(_packetProcessor);
     }
 
     private void StartClient()
@@ -25,9 +27,15 @@ public class TestClient : MonoBehaviour, INetEventListener
         _netManager = new NetManager(this)
         {
             UnconnectedMessagesEnabled = true,
+            AutoRecycle = true,
             UpdateTime = 15
         };
         _netManager.Start();
+    }
+    
+    private void Update()
+    {
+        _netManager?.PollEvents();
     }
 
     [ContextMenu(nameof(ConnectLocalhost))]
@@ -52,6 +60,8 @@ public class TestClient : MonoBehaviour, INetEventListener
 
     public void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
     {
+        Debug.Log($"{name} | OnNetworkReceive | bytes: {reader.AvailableBytes}");
+        _packetProcessor.ReadAllPackets(reader, peer);
     }
 
     public void OnNetworkReceiveUnconnected(IPEndPoint remoteEndPoint, NetPacketReader reader, UnconnectedMessageType messageType)
@@ -60,6 +70,10 @@ public class TestClient : MonoBehaviour, INetEventListener
     
     public void OnPeerConnected(NetPeer peer)
     {
+        _server = peer;
+        Debug.Log($"{name} | Connected to server");
+        
+        SendPacket(new JoinPacket {nickname = "Lomt1k"}, DeliveryMethod.ReliableOrdered);
     }
 
     public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
@@ -72,5 +86,13 @@ public class TestClient : MonoBehaviour, INetEventListener
 
     public void OnConnectionRequest(ConnectionRequest request)
     {
+        request.Reject();
+    }
+    
+    public void SendPacket<T>(T packet, DeliveryMethod deliveryMethod) where T : ClientPacket, new()
+    {
+        _dataWriter.Reset();
+        _packetProcessor.Write(_dataWriter, packet);
+        _server.Send(_dataWriter, deliveryMethod);
     }
 }
