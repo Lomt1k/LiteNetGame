@@ -3,7 +3,7 @@ namespace Networking.Client
 {
     public class ClientPlayers
     {
-        private readonly ClientPlayer[] _players; //index 0 used for "incorrect playerId"
+        private readonly ClientPlayer[] _players;
         
         public int playersOnline { get; private set; }
         public int maxPlayers => _players.Length;

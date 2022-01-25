@@ -4,7 +4,7 @@ namespace Networking.Server
 {
     public class ServerPlayers
     {
-        private readonly ServerPlayer[] _players; //index 0 used for "incorrect playerId"
+        private readonly ServerPlayer[] _players;
 
         public int playersOnline { get; private set; }
         public int maxPlayers => _players.Length;
