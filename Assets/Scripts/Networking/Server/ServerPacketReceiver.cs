@@ -28,6 +28,7 @@ namespace Networking.Server
         {
             Debug.Log($"{GetType().Name} | OnPlayerJoinedToServer {joinToServerPacket.nickname} (ID {peer.Id})");
             var newPlayer = GameServer.instance.players.CreatePlayer(peer, joinToServerPacket.nickname);
+            Sending.Connections.SendAfterJoinServerInfo(newPlayer);
         }
         
     }

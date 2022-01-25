@@ -6,11 +6,12 @@ namespace Networking.Server
     {
         private readonly ServerPlayer[] _players; //index 0 used for "incorrect playerId"
 
-        public int playersCount { get; private set; }
+        public int playersOnline { get; private set; }
+        public int maxPlayers => _players.Length;
 
         public ServerPlayers(int maxPlayers)
         {
-            _players = new ServerPlayer[maxPlayers + 1];
+            _players = new ServerPlayer[maxPlayers];
         }
 
         public ServerPlayer this[int index] => _players[index];
@@ -20,7 +21,7 @@ namespace Networking.Server
             var serverPlayer = new ServerPlayer(peer, nickname);
             var playerId = peer.Id;
             _players[playerId] = serverPlayer;
-            playersCount++;
+            playersOnline++;
 
             return serverPlayer;
         }
@@ -32,7 +33,7 @@ namespace Networking.Server
                 return;
 
             _players[playerId] = null;
-            playersCount--;
+            playersOnline--;
         }
         
         

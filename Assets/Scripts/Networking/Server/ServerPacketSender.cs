@@ -29,11 +29,11 @@ namespace Networking.Server
             SendPacket(peer, packet, deliveryMethod);
         }
         
-        public void SendPacket<T>(int playerId, T packet, DeliveryMethod deliveryMethod) where T : ServerPacket, new()
-        {
-            var serverPlayer = GameServer.instance.players[playerId];
-            SendPacket(serverPlayer, packet, deliveryMethod);
-        }
+        // public void SendPacket<T>(int playerId, T packet, DeliveryMethod deliveryMethod) where T : ServerPacket, new()
+        // {
+        //     var serverPlayer = GameServer.instance.players[playerId];
+        //     SendPacket(serverPlayer, packet, deliveryMethod);
+        // }
         
         public void SendPacketToAll<T>(T packet, DeliveryMethod deliveryMethod) where T : ServerPacket, new()
         {
@@ -55,11 +55,11 @@ namespace Networking.Server
             SendPacketToAll(packet, deliveryMethod, excludePeer);
         }
         
-        public void SendPacketToAll<T>(T packet, DeliveryMethod deliveryMethod, int excludePlayerId) where T : ServerPacket, new()
-        {
-            var serverPlayer = GameServer.instance.players[excludePlayerId];
-            SendPacketToAll(packet, deliveryMethod, serverPlayer);
-        }
+        // public void SendPacketToAll<T>(T packet, DeliveryMethod deliveryMethod, int excludePlayerId) where T : ServerPacket, new()
+        // {
+        //     var serverPlayer = GameServer.instance.players[excludePlayerId];
+        //     SendPacketToAll(packet, deliveryMethod, serverPlayer);
+        // }
         
     }
 }

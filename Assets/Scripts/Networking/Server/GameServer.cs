@@ -11,18 +11,22 @@ namespace Networking.Server
         private readonly int defaultPort = 7777;
         private readonly int defaultMaxPlayers = 1000;
         
+        public static GameServer instance { get; set; }
+        
         private NetManager _netManager;
         private ServerPacketSender _packetSender;
         private ServerPacketReceiver _packetReceiver;
 
         public ServerPlayers players { get; private set; }
-        
-        
-        public static GameServer instance { get; set; }
+        public ServerPacketSender sender => _packetSender;
 
         public bool isRunning => _netManager != null && _netManager.IsRunning;
-        
-        
+
+        private void Awake()
+        {
+            instance = this;
+        }
+
         [ContextMenu(nameof(StartServer))]
         public void StartServer()
         {
@@ -31,7 +35,6 @@ namespace Networking.Server
 
         public void StartServer(int port, int maxPlayers)
         {
-            instance = this;
             players = new ServerPlayers(maxPlayers);
             _netManager = new NetManager(this)
             {
@@ -89,7 +92,7 @@ namespace Networking.Server
 
         public void OnConnectionRequest(ConnectionRequest request)
         {
-            var netPeer = request.AcceptIfKey(NetInfo.connectionKey);
+            request.AcceptIfKey(NetInfo.connectionKey);
         }
         
     }

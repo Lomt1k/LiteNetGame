@@ -8,12 +8,14 @@ namespace Networking.Client
 {
     public class GameClient : MonoBehaviour, INetEventListener
     {
+        public static GameClient instance { get; set; }
+        
         private NetManager _netManager;
         private NetPeer _server;
         private ClientPacketSender _packetSender;
         private ClientPacketReceiver _packetReceiver;
         
-        public static GameClient instance { get; set; }
+        public ClientPlayers players { get; private set; }
 
         public bool isStarted => _netManager != null;
         public ConnectionState connectionState => _server?.ConnectionState ?? ConnectionState.Disconnected;
@@ -98,6 +100,11 @@ namespace Networking.Client
         public void OnConnectionRequest(ConnectionRequest request)
         {
             request.Reject();
+        }
+
+        public void CreatePlayersList(int maxPlayers)
+        {
+            players = new ClientPlayers(maxPlayers);
         }
         
         

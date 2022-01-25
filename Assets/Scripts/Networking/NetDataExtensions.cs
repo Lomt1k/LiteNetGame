@@ -8,9 +8,12 @@ namespace Networking
         public static void RegisterDataTypes(NetPacketProcessor pc)
         {
             pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetVector2());
-            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetVector3());
+            pc.RegisterNestedType<Vector3>((w, v) => w.Put(v), reader => reader.GetVector3());
             pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetVector4());
             pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetQuaternion());
+            
+            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetSendablePlayerData());
+            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetSendablePlayerDataArray());
         }
         
         // Vector2
@@ -87,6 +90,49 @@ namespace Networking
             };
         }
         
+        // SendablePlayerData
+        public static void Put(this NetDataWriter writer, SendablePlayerData data)
+        {
+            writer.Put(data.playerId);
+            writer.Put(data.nickname);
+        }
+        
+        public static SendablePlayerData GetSendablePlayerData(this NetDataReader reader)
+        {
+            return new SendablePlayerData
+            {
+                playerId = reader.GetUShort(),
+                nickname = reader.GetString()
+            };
+        }
+        
+        // SendablePlayerData[]
+        public static void Put(this NetDataWriter writer, SendablePlayerData[] dataArray)
+        {
+            writer.Put(dataArray.Length);
+            foreach (var data in dataArray)
+            {
+                writer.Put(data);
+            }
+        }
+        
+        public static SendablePlayerData[] GetSendablePlayerDataArray(this NetDataReader reader)
+        {
+            int size = reader.GetInt();
+            var resultArray = new SendablePlayerData[size];
+            Debug.LogWarning($"size: {size}");
+            for (int i = 0; i < size; i++)
+            {
+                var data = new SendablePlayerData
+                {
+                    playerId = reader.GetUShort(),
+                    nickname = reader.GetString()
+                };
+                Debug.LogWarning($"id: {data.playerId} name {data.nickname}");
+                resultArray[i] = data;
+            }
+            return resultArray;
+        }
         
         
     }
