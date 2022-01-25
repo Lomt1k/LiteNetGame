@@ -24,10 +24,10 @@ namespace Networking.Server
             _packetProcessor.SubscribeReusable<JoinToServerPacket, NetPeer>(OnPlayerJoined);
         }
         
-        private void OnPlayerJoined(JoinToServerPacket joinToServerPacket, NetPeer peer)
+        private void OnPlayerJoined(JoinToServerPacket packet, NetPeer peer)
         {
-            Debug.Log($"{GetType().Name} | OnPlayerJoinedToServer {joinToServerPacket.nickname} (ID {peer.Id})");
-            var newPlayer = GameServer.instance.players.CreatePlayer(peer, joinToServerPacket.nickname);
+            Debug.Log($"{GetType().Name} | OnPlayerJoinedToServer {packet.nickname} (ID {peer.Id})");
+            var newPlayer = GameServer.instance.players.CreatePlayer(peer, packet.nickname);
             Sending.Connections.SendAfterJoinServerInfo(newPlayer);
         }
         

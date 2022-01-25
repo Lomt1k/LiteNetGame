@@ -32,17 +32,15 @@ namespace Networking.Client
             
             Debug.Log($"{GetType().Name} | OnAfterJoinInfoReceived " +
                       $"| minePlayerId: {packet.minePlayerId} " +
-                      //$"| playersOnline: {packet.playersData.Length} " +
+                      $"| playersOnline: {packet.playersData.Length} " +
                       $"| maxPlayers: {packet.maxPlayers}");
             
-            //Debug.Log($"Test read data {packet.testData.playerId} {packet.testData.nickname}");
-            Debug.Log($"Test vector3 {packet.vector3.ToString()}");
-            
-            // foreach (var playerData in packet.playersData)
-            // {
-            //     Debug.Log($"Player created | {playerData.nickname} (ID {playerData.playerId})");
-            //     _players.CreatePlayer(playerData);
-            // }
+            foreach (var playerData in packet.playersData)
+            {
+                Debug.Log($"{GetType().Name} | Player created | {playerData.nickname} (ID {playerData.playerId})");
+                bool isMine = playerData.playerId == packet.minePlayerId;
+                _players.CreatePlayer(playerData, isMine);
+            }
         }
         
     }

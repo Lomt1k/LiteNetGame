@@ -7,10 +7,8 @@ namespace Networking
     
     public class AfterJoinInfoPacket : ServerPacket
     {
-        public ushort maxPlayers;
-        public ushort minePlayerId;
-        //public SendablePlayerData testData;
-        public Vector3 vector3;
-        //public SendablePlayerData[] playersData;
+        public ushort maxPlayers { get; set; }
+        public ushort minePlayerId { get; set; }
+        public SendablePlayerData[] playersData { get; set; }
     }
 }

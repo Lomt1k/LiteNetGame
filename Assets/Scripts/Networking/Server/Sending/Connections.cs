@@ -34,10 +34,7 @@ namespace Networking.Server.Sending
             {
                 maxPlayers = (ushort)players.maxPlayers,
                 minePlayerId = (ushort)player.playerId,
-                //testData = new SendablePlayerData() {playerId = 600, nickname = "Tester"},
-                vector3 = Vector3.back,
-                
-                //playersData = dataArray
+                playersData = dataArray
             };
             
             sender.SendPacket(player, packet, DeliveryMethod.ReliableOrdered);
