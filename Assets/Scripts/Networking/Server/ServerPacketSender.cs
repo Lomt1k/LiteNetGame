@@ -23,6 +23,18 @@ namespace Networking.Server
             peer.Send(_dataWriter, deliveryMethod);
         }
         
+        public void SendPacket<T>(ServerPlayer player, T packet, DeliveryMethod deliveryMethod) where T : ServerPacket, new()
+        {
+            var peer = player.peer;
+            SendPacket(peer, packet, deliveryMethod);
+        }
+        
+        public void SendPacket<T>(int playerId, T packet, DeliveryMethod deliveryMethod) where T : ServerPacket, new()
+        {
+            var serverPlayer = GameServer.instance.players[playerId];
+            SendPacket(serverPlayer, packet, deliveryMethod);
+        }
+        
         public void SendPacketToAll<T>(T packet, DeliveryMethod deliveryMethod) where T : ServerPacket, new()
         {
             _dataWriter.Reset();
@@ -37,7 +49,17 @@ namespace Networking.Server
             _netManager.SendToAll(_dataWriter, deliveryMethod, excludePeer);
         }
         
+        public void SendPacketToAll<T>(T packet, DeliveryMethod deliveryMethod, ServerPlayer excludePlayer) where T : ServerPacket, new()
+        {
+            var excludePeer = excludePlayer.peer;
+            SendPacketToAll(packet, deliveryMethod, excludePeer);
+        }
         
+        public void SendPacketToAll<T>(T packet, DeliveryMethod deliveryMethod, int excludePlayerId) where T : ServerPacket, new()
+        {
+            var serverPlayer = GameServer.instance.players[excludePlayerId];
+            SendPacketToAll(packet, deliveryMethod, serverPlayer);
+        }
         
     }
 }

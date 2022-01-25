@@ -14,8 +14,8 @@ namespace Networking.Server
         private NetManager _netManager;
         private ServerPacketSender _packetSender;
         private ServerPacketReceiver _packetReceiver;
-        
-        private NetPeer[] _peers;
+
+        public ServerPlayers players { get; private set; }
         
         
         public static GameServer instance { get; set; }
@@ -31,8 +31,8 @@ namespace Networking.Server
 
         public void StartServer(int port, int maxPlayers)
         {
-            _peers = new NetPeer[maxPlayers];
-            
+            instance = this;
+            players = new ServerPlayers(maxPlayers);
             _netManager = new NetManager(this)
             {
                 BroadcastReceiveEnabled = true,
@@ -42,7 +42,7 @@ namespace Networking.Server
             _netManager.Start(port);
             InitializePacketProcessor();
 
-            Debug.Log($"{name} | Started on port: {port}");
+            Debug.Log($"{name} | Started on port: {port} maxPlayers: {maxPlayers}");
         }
 
         private void InitializePacketProcessor()
