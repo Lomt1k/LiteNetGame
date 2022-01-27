@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using LiteNetLib;
-using UnityEngine;
+﻿using LiteNetLib;
 
 namespace Networking.Server.Sending
 {
-    public static class Connections
+    public static class ServerSending_Connections
     {
         private static ServerPacketSender sender => GameServer.instance.sender;
         private static ServerPlayers players => GameServer.instance.players;
