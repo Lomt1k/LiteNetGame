@@ -1,6 +1,6 @@
 ﻿using LiteNetLib;
 using LiteNetLib.Utils;
-using UnityEngine;
+using Networking.Server.Receiving;
 
 namespace Networking.Server
 {
@@ -21,14 +21,7 @@ namespace Networking.Server
 
         private void SubscribeToReceivedPackets()
         {
-            _packetProcessor.SubscribeReusable<JoinToServerPacket, NetPeer>(OnPlayerJoined);
-        }
-        
-        private void OnPlayerJoined(JoinToServerPacket packet, NetPeer peer)
-        {
-            Debug.Log($"{GetType().Name} | OnPlayerJoinedToServer {packet.nickname} (ID {peer.Id})");
-            var newPlayer = GameServer.instance.players.CreatePlayer(peer, packet.nickname);
-            Sending.Connections.SendAfterJoinServerInfo(newPlayer);
+            ServerReceiving_Connections.SubscribeToReceivedPackets(_packetProcessor);
         }
         
     }

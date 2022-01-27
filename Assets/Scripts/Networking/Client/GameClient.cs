@@ -6,6 +6,8 @@ using UnityEngine;
 
 namespace Networking.Client
 {
+    using Sending;
+    
     public class GameClient : MonoBehaviour, INetEventListener
     {
         public static GameClient instance { get; set; }
@@ -16,6 +18,7 @@ namespace Networking.Client
         private ClientPacketReceiver _packetReceiver;
         
         public ClientPlayers players { get; private set; }
+        public ClientPacketSender sender => _packetSender;
 
         public bool isStarted => _netManager != null;
         public ConnectionState connectionState => _server?.ConnectionState ?? ConnectionState.Disconnected;
@@ -85,8 +88,7 @@ namespace Networking.Client
         {
             _server = peer;
             Debug.Log($"{name} | Connected to server");
-            
-            _packetSender.SendPacket(new JoinToServerPacket {nickname = "Lomt1k"}, DeliveryMethod.ReliableOrdered);
+            ClientSending_Connections.SendJoinServerPacket();
         }
 
         public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
