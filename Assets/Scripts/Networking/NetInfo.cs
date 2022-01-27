@@ -5,10 +5,10 @@
     
     public enum NetMode : byte
     {
-        None,
-        Client,
-        Server,
-        Host
+        None = 0,
+        Client = 1,
+        Server = 2,
+        Host = 3
     }
     
     public static class NetInfo

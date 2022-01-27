@@ -66,6 +66,10 @@ namespace Networking.Client
 
         public void Connect(IPEndPoint endPoint)
         {
+            if (_netManager == null)
+            {
+                StartClient();
+            }
             Debug.Log($"{name} | Connecting to {endPoint}");
             _netManager.Connect(endPoint, NetInfo.connectionKey);
         }
