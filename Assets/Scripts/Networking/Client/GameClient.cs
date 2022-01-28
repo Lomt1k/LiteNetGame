@@ -2,6 +2,8 @@
 using System.Net.Sockets;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using Project.UI.Windows;
+using Project.UI.Windows.TextChatWindow;
 using UnityEngine;
 
 namespace Networking.Client
@@ -28,7 +30,6 @@ namespace Networking.Client
             instance = this;
         }
 
-        [ContextMenu(nameof(StartClient))]
         private void StartClient()
         {
             _netManager = new NetManager(this)
@@ -39,7 +40,8 @@ namespace Networking.Client
             };
             _netManager.Start();
             InitializePacketProcessor();
-            Debug.Log($"{name} | Client started");
+            InitializeClientGlobalManagers();
+            TextChatWindow.instance.AddMessage($"Client started");
         }
         
         private void InitializePacketProcessor()
@@ -49,19 +51,15 @@ namespace Networking.Client
             _packetSender = new ClientPacketSender(_netManager, packetProcessor);
             _packetReceiver = new ClientPacketReceiver(packetProcessor);
         }
+
+        private void InitializeClientGlobalManagers()
+        {
+            WindowsManager.CreateWindow<TextChatWindow>(Layer.InGameHUD);
+        }
         
         private void Update()
         {
             _netManager?.PollEvents();
-        }
-
-        [ContextMenu(nameof(ConnectLocalhost))]
-        public void ConnectLocalhost()
-        {
-            var ip = IPAddress.Parse("127.0.0.1");
-            int port = 7777;
-            var endPoint = new IPEndPoint(ip, port);
-            Connect(endPoint);
         }
 
         public void Connect(IPEndPoint endPoint)
@@ -70,7 +68,7 @@ namespace Networking.Client
             {
                 StartClient();
             }
-            Debug.Log($"{name} | Connecting to {endPoint}");
+            TextChatWindow.instance.AddMessage($"Connecting to <color=grey>{endPoint}</color>");
             _netManager.Connect(endPoint, NetInfo.connectionKey);
         }
 
@@ -91,7 +89,6 @@ namespace Networking.Client
         public void OnPeerConnected(NetPeer peer)
         {
             _server = peer;
-            Debug.Log($"{name} | Connected to server");
             ClientSending_Connections.SendJoinServerPacket();
         }
 

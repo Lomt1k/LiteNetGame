@@ -12,6 +12,7 @@ namespace Project.UI.Windows
         [SerializeField, ID("Layer")]
         private LayersDictionary _layers;
 
+        public static Action<Window> onWindowCreated;
         public static Action<Window> onWindowClosed;
 
         private void Awake()
@@ -27,7 +28,9 @@ namespace Project.UI.Windows
 
             Transform parent = instance._layers[layer];
             T createdWindow = Instantiate(Resources.Load<GameObject>(prefabPath), parent).GetComponent<T>();
+            createdWindow.OnCreated();
             createdWindow.onClose += () => onWindowClosed?.Invoke(createdWindow);
+            onWindowCreated?.Invoke(createdWindow);
 
             return createdWindow;
         }

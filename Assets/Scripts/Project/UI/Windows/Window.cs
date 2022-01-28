@@ -6,6 +6,10 @@ namespace Project.UI.Windows
     {
         public System.Action onClose;
 
+        public virtual void OnCreated()
+        {
+        }
+
         public virtual void Close()
         {
             onClose?.Invoke();
