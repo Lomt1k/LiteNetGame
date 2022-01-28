@@ -7,7 +7,7 @@ namespace Project.UI.Windows.StartGameWindow
 {
     public class StartGameWindow : Window
     {
-        public const string prefabPath = "Prefabs/UI/Windows/StartGameWindow/StartGameWindow";
+        public const string prefabPath = "Prefabs/UI/Windows/StartGameWindow/Start Game Window";
         
         [SerializeField] private Transform _clientPanel;
         [SerializeField] private Image _clientTabButtonImage;
