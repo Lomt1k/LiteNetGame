@@ -3,10 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace Project.UI.Windows
+namespace Project.UI.Windows.StartGameWindow
 {
-    public class StartGameWindow : MonoBehaviour
+    public class StartGameWindow : Window
     {
+        public const string prefabPath = "Prefabs/UI/Windows/StartGameWindow/StartGameWindow";
+        
         [SerializeField] private Transform _clientPanel;
         [SerializeField] private Image _clientTabButtonImage;
         [SerializeField] private TextMeshProUGUI _clientInputIP;
@@ -111,7 +113,7 @@ namespace Project.UI.Windows
             bool success = NetStarter.TryStartClient(ipStr, port, nickname);
             if (success)
             {
-                CloseWindow();
+                Close();
             }
         }
         
@@ -128,7 +130,7 @@ namespace Project.UI.Windows
             bool success = NetStarter.TryStartServer(port, players);
             if (success)
             {
-                CloseWindow();
+                Close();
             }
         }
         
@@ -149,13 +151,8 @@ namespace Project.UI.Windows
             bool success = NetStarter.TryStartHost(port, players, nickname);
             if (success)
             {
-                CloseWindow();
+                Close();
             }
-        }
-
-        private void CloseWindow()
-        {
-            gameObject.SetActive(false);
         }
         
         
