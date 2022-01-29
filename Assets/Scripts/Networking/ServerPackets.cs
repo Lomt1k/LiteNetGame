@@ -14,6 +14,16 @@ namespace Networking
     {
         public string text { get; set; }
     }
+
+    public class ServerAnotherPlayerJoined : ServerPacket
+    {
+        public SendablePlayerData playerData { get; set; }
+    }
+    
+    public class ServerAnotherPlayerLeft : ServerPacket
+    {
+        public ushort playerId { get; set; }
+    }
     
     
 }

@@ -68,7 +68,13 @@ namespace Networking.Server
 
         public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
         {
-            Debug.Log($"{name} | OnPeerDisconnected (IP: {peer.EndPoint}, {disconnectInfo})");
+            Debug.Log($"{name} | OnPeerDisconnected (IP: {peer.EndPoint}, {disconnectInfo.Reason})");
+            var disconnectedPlayer = players[peer.Id];
+            if (disconnectedPlayer == null)
+                return;
+
+            Sending.ServerSending_Connections.SendAnotherPlayerLeft(disconnectedPlayer);
+            players.RemovePlayer(peer);
         }
 
         public void OnNetworkError(IPEndPoint endPoint, SocketError socketError)

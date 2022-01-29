@@ -13,14 +13,14 @@ namespace Networking.Server.Sending
             int dataArrayIndex = 0;
             for (int i = 0; i < players.maxPlayers; i++)
             {
-                var severPlayer = players[i];
+                var serverPlayer = players[i];
                 if (players[i] == null)
                     continue;
                 
-                dataArray[dataArrayIndex] = new SendablePlayerData()
+                dataArray[dataArrayIndex] = new SendablePlayerData
                 {
-                    playerId = (ushort) severPlayer.playerId,
-                    nickname = severPlayer.nickname
+                    playerId = (ushort) serverPlayer.playerId,
+                    nickname = serverPlayer.nickname
                 };
                     
                 dataArrayIndex++;
@@ -28,7 +28,7 @@ namespace Networking.Server.Sending
                     break;
             }
                 
-            var packet = new AfterJoinInfoPacket()
+            var packet = new AfterJoinInfoPacket
             {
                 maxPlayers = (ushort)players.maxPlayers,
                 minePlayerId = (ushort)targetPlayer.playerId,
@@ -36,6 +36,23 @@ namespace Networking.Server.Sending
             };
             
             sender.SendPacket(targetPlayer, packet, DeliveryMethod.ReliableOrdered);
+        }
+
+        public static void SendAnotherPlayerJoined(ServerPlayer anotherPlayer)
+        {
+            var playerData = new SendablePlayerData
+            {
+                playerId = (ushort) anotherPlayer.playerId,
+                nickname = anotherPlayer.nickname
+            };
+            var packet = new ServerAnotherPlayerJoined {playerData = playerData};
+            sender.SendPacketToAll(packet, DeliveryMethod.ReliableOrdered, anotherPlayer);
+        }
+        
+        public static void SendAnotherPlayerLeft(ServerPlayer anotherPlayer)
+        {
+            var packet = new ServerAnotherPlayerLeft {playerId = (ushort) anotherPlayer.playerId};
+            sender.SendPacketToAll(packet, DeliveryMethod.ReliableOrdered, anotherPlayer);
         }
         
         

@@ -29,6 +29,7 @@ namespace Networking.Client
         private void Awake()
         {
             instance = this;
+            Application.quitting += OnApplicationQuitting;
         }
 
         private void StartClient()
@@ -91,7 +92,7 @@ namespace Networking.Client
         public void OnPeerConnected(NetPeer peer)
         {
             _server = peer;
-            ClientSending_Connections.SendJoinServerPacket(_nicknameForConnection);
+            ClientSending_Connections.SendJoinToServer(_nicknameForConnection);
         }
 
         public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
@@ -112,6 +113,14 @@ namespace Networking.Client
             players = new ClientPlayers(maxPlayers);
         }
         
-        
+        private void OnApplicationQuitting()
+        {
+            _server?.Disconnect();
+        }
+
+        private void OnDestroy()
+        {
+            Application.quitting -= OnApplicationQuitting;
+        }
     }
 }

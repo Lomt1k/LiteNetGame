@@ -12,6 +12,8 @@ namespace Networking.Client.Receiving
         public static void SubscribeToReceivedPackets(NetPacketProcessor packetProcessor)
         {
             packetProcessor.SubscribeReusable<AfterJoinInfoPacket, NetPeer>(OnAfterJoinInfoReceived);
+            packetProcessor.SubscribeReusable<ServerAnotherPlayerJoined, NetPeer>(OnAnotherPlayerJoined);
+            packetProcessor.SubscribeReusable<ServerAnotherPlayerLeft, NetPeer>(OnAnotherPlayerLeft);
         }
         
         private static void OnAfterJoinInfoReceived(AfterJoinInfoPacket packet, NetPeer peer)
@@ -32,6 +34,22 @@ namespace Networking.Client.Receiving
             }
 
             TextChatWindow.instance.AddMessage($"Joined to server as <color=#AFAFAF>{NetInfo.minePlayer.nickname}</color>. Players online: {packet.playersData.Length}");
+        }
+
+        private static void OnAnotherPlayerJoined(ServerAnotherPlayerJoined packet, NetPeer peer)
+        {
+            _players?.CreatePlayer(packet.playerData, false);
+            TextChatWindow.instance.AddMessage($"<color=#AFAFAF>{packet.playerData.nickname} has joined the server");
+        }
+        
+        private static void OnAnotherPlayerLeft(ServerAnotherPlayerLeft packet, NetPeer peer)
+        {
+            var player = _players?[packet.playerId];
+            if (player == null)
+                return;
+            
+            TextChatWindow.instance.AddMessage($"<color=#AFAFAF>{player.nickname} has left the server");
+            _players.RemovePlayer(packet.playerId);
         }
         
         
