@@ -1,4 +1,5 @@
-﻿using LiteNetLib;
+﻿using System.Linq;
+using LiteNetLib;
 using LiteNetLib.Utils;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace Networking.Server.Receiving
     public static class ServerReceiving_TextChat
     {
         private static ServerPlayers players => GameServer.instance.players;
+        
+        private const int maxMessageLength = 80;
         
         public static void SubscribeToReceivedPackets(NetPacketProcessor packetProcessor)
         {
@@ -20,8 +23,30 @@ namespace Networking.Server.Receiving
                 return;
 
             Debug.Log($"ServerReceiving :: OnTextChat | {sender.nickname} [ID {peer.Id}]: {packet.text}");
-            var formattedText = $"<color=#AFAFAF>{sender.nickname}:</color> {packet.text}";
-            Sending.ServerSending_TextChat.SendTextChatMessageToAll(formattedText);
+            
+            //TODO: Не шибко оптимизированная работа со строками
+            var formattedText = $"{sender.nickname}: {packet.text}";
+            if (formattedText.Length <= maxMessageLength)
+            {
+                SetColoredNickname(ref formattedText, sender.nickname, "#AFAFAF");
+                Sending.ServerSending_TextChat.SendTextChatMessageToAll(formattedText);
+            }
+            else
+            {
+                var texts = formattedText.SplitByLength(maxMessageLength).ToArray();
+                SetColoredNickname(ref texts[0], sender.nickname, "#AFAFAF");
+                foreach (var text in texts)
+                {
+                    Sending.ServerSending_TextChat.SendTextChatMessageToAll(text);
+                }
+            }
+
+        }
+
+        private static void SetColoredNickname(ref string formattedText, string nickname, string color)
+        {
+            formattedText = formattedText.Insert(nickname.Length + 1, "</color>");
+            formattedText = formattedText.Insert(0, $"<color={color}>");
         }
         
         
