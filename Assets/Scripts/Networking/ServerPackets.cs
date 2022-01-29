@@ -9,4 +9,11 @@ namespace Networking
         public ushort minePlayerId { get; set; }
         public SendablePlayerData[] playersData { get; set; }
     }
+    
+    public class ServerTextChatMessagePacket : ServerPacket
+    {
+        public string text { get; set; }
+    }
+    
+    
 }

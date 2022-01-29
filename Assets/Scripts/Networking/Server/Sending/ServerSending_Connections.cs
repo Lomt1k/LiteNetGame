@@ -7,7 +7,7 @@ namespace Networking.Server.Sending
         private static ServerPacketSender sender => GameServer.instance.sender;
         private static ServerPlayers players => GameServer.instance.players;
 
-        public static void SendAfterJoinServerInfo(ServerPlayer player)
+        public static void SendAfterJoinServerInfo(ServerPlayer targetPlayer)
         {
             var dataArray = new SendablePlayerData[players.playersOnline];
             int dataArrayIndex = 0;
@@ -31,11 +31,11 @@ namespace Networking.Server.Sending
             var packet = new AfterJoinInfoPacket()
             {
                 maxPlayers = (ushort)players.maxPlayers,
-                minePlayerId = (ushort)player.playerId,
+                minePlayerId = (ushort)targetPlayer.playerId,
                 playersData = dataArray
             };
             
-            sender.SendPacket(player, packet, DeliveryMethod.ReliableOrdered);
+            sender.SendPacket(targetPlayer, packet, DeliveryMethod.ReliableOrdered);
         }
         
         

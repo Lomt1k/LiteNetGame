@@ -8,5 +8,12 @@ namespace Networking
     {
         public string nickname { get; set; }
     }
+    
+    public class ClientTextChatMessagePacket : ClientPacket
+    {
+        public string text { get; set; }
+    }
+    
+    
 }
 

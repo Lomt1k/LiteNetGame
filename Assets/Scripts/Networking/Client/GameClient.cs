@@ -68,7 +68,7 @@ namespace Networking.Client
             {
                 StartClient();
             }
-            TextChatWindow.instance.AddMessage($"Connecting to <color=grey>{endPoint}</color>");
+            TextChatWindow.instance.AddMessage($"Connecting to <color=#007FFF>{endPoint}</color>");
             _netManager.Connect(endPoint, NetInfo.connectionKey);
         }
 

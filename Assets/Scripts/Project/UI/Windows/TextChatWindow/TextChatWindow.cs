@@ -86,7 +86,7 @@ namespace Project.UI.Windows.TextChatWindow
             bool enterPressed = Input.GetKeyDown(KeyCode.Return);
             if (enterPressed && inputText.Length > 1)
             {
-                //TODO send message
+                Networking.Client.Sending.ClientSending_TextChat.SendTextChatMessage(inputText);
             }
             
             ToggleInputField(false);
