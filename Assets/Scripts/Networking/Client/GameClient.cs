@@ -18,6 +18,7 @@ namespace Networking.Client
         private NetPeer _server;
         private ClientPacketSender _packetSender;
         private ClientPacketReceiver _packetReceiver;
+        private string _nicknameForConnection;
         
         public ClientPlayers players { get; private set; }
         public ClientPacketSender sender => _packetSender;
@@ -62,13 +63,14 @@ namespace Networking.Client
             _netManager?.PollEvents();
         }
 
-        public void Connect(IPEndPoint endPoint)
+        public void Connect(IPEndPoint endPoint, string nickname)
         {
             if (_netManager == null)
             {
                 StartClient();
             }
             TextChatWindow.instance.AddMessage($"Connecting to <color=#007FFF>{endPoint}</color>");
+            _nicknameForConnection = nickname;
             _netManager.Connect(endPoint, NetInfo.connectionKey);
         }
 
@@ -89,7 +91,7 @@ namespace Networking.Client
         public void OnPeerConnected(NetPeer peer)
         {
             _server = peer;
-            ClientSending_Connections.SendJoinServerPacket();
+            ClientSending_Connections.SendJoinServerPacket(_nicknameForConnection);
         }
 
         public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)

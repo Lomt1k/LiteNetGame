@@ -47,7 +47,7 @@ namespace Networking
             }
             
             var endPoint = new IPEndPoint(ipAddress, port);
-            GameClient.instance.Connect(endPoint);
+            GameClient.instance.Connect(endPoint, nickname);
             NetInfo.SetMode(NetMode.Client);
             return true;
         }

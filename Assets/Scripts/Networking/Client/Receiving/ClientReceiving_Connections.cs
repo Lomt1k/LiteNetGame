@@ -30,8 +30,8 @@ namespace Networking.Client.Receiving
                 bool isMine = playerData.playerId == packet.minePlayerId;
                 _players.CreatePlayer(playerData, isMine);
             }
-            
-            TextChatWindow.instance.AddMessage($"Joined to server. Players online: {packet.playersData.Length}");
+
+            TextChatWindow.instance.AddMessage($"Joined to server as <color=#AFAFAF>{NetInfo.minePlayer.nickname}</color>. Players online: {packet.playersData.Length}");
         }
         
         
