@@ -8,6 +8,9 @@ namespace Project.UI.Windows.StartGameWindow
     public class StartGameWindow : Window
     {
         public const string prefabPath = "Prefabs/UI/Windows/StartGameWindow/Start Game Window";
+        public const string defaultIp = "127.0.0.1";
+        public const int defaultPort = 5555;
+        public const int defaultMaxPlayers = 1000;
         
         [SerializeField] private Transform _clientPanel;
         [SerializeField] private Image _clientTabButtonImage;
@@ -99,12 +102,12 @@ namespace Project.UI.Windows.StartGameWindow
             string ipStr = _clientInputIP.text.Remove(_clientInputIP.text.Length - 1);
             if (string.IsNullOrWhiteSpace(ipStr))
             {
-                ipStr = "127.0.0.1";
+                ipStr = defaultIp;
             }
 
             string portStr = _clientInputPort.text.Remove(_clientInputPort.text.Length - 1);
             if (!int.TryParse(portStr, out var port))
-                port = 7777;
+                port = defaultPort;
             
             string nickname = _clientInputNickname.text.Remove(_clientInputNickname.text.Length - 1);
             if (string.IsNullOrWhiteSpace(nickname) || nickname.Length < 3 || nickname.Length > 24)
@@ -121,11 +124,11 @@ namespace Project.UI.Windows.StartGameWindow
         {
             string portStr = _serverInputPort.text.Remove(_serverInputPort.text.Length - 1);
             if (!int.TryParse(portStr, out var port))
-                port = 7777;
+                port = defaultPort;
             
             string playersStr = _serverInputPlayers.text.Remove(_serverInputPlayers.text.Length - 1);
             if (!int.TryParse(playersStr, out var players) || players < 1 || players > NetInfo.maxPlayersLimit)
-                players = 1000;
+                players = defaultMaxPlayers;
 
             bool success = NetStarter.TryStartServer(port, players);
             if (success)
@@ -138,11 +141,11 @@ namespace Project.UI.Windows.StartGameWindow
         {
             string portStr = _hostInputPort.text.Remove(_hostInputPort.text.Length - 1);
             if (!int.TryParse(portStr, out var port))
-                port = 7777;
+                port = defaultPort;
             
             string playersStr = _hostInputPlayers.text.Remove(_hostInputPlayers.text.Length - 1);
             if (!int.TryParse(playersStr, out var players) || players < 1 || players > NetInfo.maxPlayersLimit) 
-                players = 1000;
+                players = defaultMaxPlayers;
             
             string nickname = _hostInputNickname.text.Remove(_hostInputNickname.text.Length - 1);;
             if (string.IsNullOrWhiteSpace(nickname) || nickname.Length < 3 || nickname.Length > 24)

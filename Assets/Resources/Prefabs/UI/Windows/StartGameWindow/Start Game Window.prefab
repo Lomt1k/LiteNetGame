@@ -3094,7 +3094,7 @@ PrefabInstance:
     - target: {fileID: 2429119964333062368, guid: 5634262db555df24c80b5c0d43912872,
         type: 3}
       propertyPath: m_text
-      value: 7777
+      value: 5555
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5634262db555df24c80b5c0d43912872, type: 3}
@@ -3278,7 +3278,7 @@ PrefabInstance:
     - target: {fileID: 83835289739475311, guid: 19de1a21b1f398b4ea6ca9a2a6a7a1e3,
         type: 3}
       propertyPath: m_Name
-      value: StartGameWindow Variant
+      value: Start Game Window
       objectReference: {fileID: 0}
     - target: {fileID: 3080500003365419723, guid: 19de1a21b1f398b4ea6ca9a2a6a7a1e3,
         type: 3}
@@ -3880,7 +3880,7 @@ PrefabInstance:
     - target: {fileID: 2429119964333062368, guid: 5634262db555df24c80b5c0d43912872,
         type: 3}
       propertyPath: m_text
-      value: 7777
+      value: 5555
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5634262db555df24c80b5c0d43912872, type: 3}
@@ -4520,7 +4520,7 @@ PrefabInstance:
     - target: {fileID: 2429119964333062368, guid: 5634262db555df24c80b5c0d43912872,
         type: 3}
       propertyPath: m_text
-      value: 7777
+      value: 5555
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5634262db555df24c80b5c0d43912872, type: 3}
