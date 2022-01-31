@@ -12,8 +12,8 @@ namespace Networking
             pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetVector4());
             pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetQuaternion());
             
-            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetSendablePlayerData());
-            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetSendablePlayerDataArray());
+            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetPlayerConnectionData());
+            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetPlayerConnectionDataArray());
         }
         
         // Vector2
@@ -90,23 +90,25 @@ namespace Networking
             };
         }
         
-        // SendablePlayerData
+        // PlayerConnectionData
         public static void Put(this NetDataWriter writer, PlayerConnectionData connectionData)
         {
             writer.Put(connectionData.playerId);
+            writer.Put(connectionData.ping);
             writer.Put(connectionData.nickname);
         }
         
-        public static PlayerConnectionData GetSendablePlayerData(this NetDataReader reader)
+        public static PlayerConnectionData GetPlayerConnectionData(this NetDataReader reader)
         {
             return new PlayerConnectionData
             {
                 playerId = reader.GetUShort(),
+                ping = reader.GetUShort(),
                 nickname = reader.GetString()
             };
         }
         
-        // SendablePlayerData[]
+        // PlayerConnectionData[]
         public static void Put(this NetDataWriter writer, PlayerConnectionData[] dataArray)
         {
             writer.Put(dataArray.Length);
@@ -116,11 +118,10 @@ namespace Networking
             }
         }
         
-        public static PlayerConnectionData[] GetSendablePlayerDataArray(this NetDataReader reader)
+        public static PlayerConnectionData[] GetPlayerConnectionDataArray(this NetDataReader reader)
         {
             int size = reader.GetInt();
             var resultArray = new PlayerConnectionData[size];
-            Debug.LogWarning($"size: {size}");
             for (int i = 0; i < size; i++)
             {
                 var data = new PlayerConnectionData
@@ -128,7 +129,6 @@ namespace Networking
                     playerId = reader.GetUShort(),
                     nickname = reader.GetString()
                 };
-                Debug.LogWarning($"id: {data.playerId} name {data.nickname}");
                 resultArray[i] = data;
             }
             return resultArray;

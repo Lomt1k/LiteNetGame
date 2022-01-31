@@ -101,6 +101,7 @@ namespace Networking.Client
 
         public void OnNetworkLatencyUpdate(NetPeer peer, int latency)
         {
+            NetInfo.minePlayer?.UpdatePing(latency);
         }
 
         public void OnConnectionRequest(ConnectionRequest request)

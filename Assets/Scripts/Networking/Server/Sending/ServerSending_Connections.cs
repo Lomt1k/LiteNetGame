@@ -16,12 +16,13 @@ namespace Networking.Server.Sending
             for (int i = 0; i < players.maxPlayers; i++)
             {
                 var serverPlayer = players[i];
-                if (players[i] == null)
+                if (serverPlayer == null)
                     continue;
                 
                 dataArray[dataArrayIndex] = new PlayerConnectionData
                 {
                     playerId = (ushort) serverPlayer.playerId,
+                    ping = (ushort) serverPlayer.peer.Ping,
                     nickname = serverPlayer.nickname
                 };
                     
@@ -45,6 +46,7 @@ namespace Networking.Server.Sending
             var playerData = new PlayerConnectionData
             {
                 playerId = (ushort) newPlayer.playerId,
+                ping = (ushort) newPlayer.peer.Ping,
                 nickname = newPlayer.nickname
             };
             var packet = new ServerAnotherPlayerJoined {PlayerConnectionData = playerData};

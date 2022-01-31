@@ -29,7 +29,7 @@ namespace Networking.Client.Receiving
             
             foreach (var playerData in packet.playersData)
             {
-                Debug.Log($"ClientReceiving :: Player created | {playerData.nickname} (ID {playerData.playerId})");
+                Debug.Log($"ClientReceiving :: Player created | [ID {playerData.playerId}] {playerData.nickname} (Ping {playerData.ping})");
                 bool isMine = playerData.playerId == packet.minePlayerId;
                 _players.CreatePlayer(playerData, isMine);
             }
