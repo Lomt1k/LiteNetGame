@@ -3,6 +3,8 @@ using LiteNetLib.Utils;
 using Project.UI.Windows.TextChatWindow;
 using UnityEngine;
 using Networking.Server.Sending.Packets.Connections;
+using Project.UI.Windows;
+using Project.UI.Windows.PlayersTabWindow;
 
 namespace Networking.Client.Receiving
 {
@@ -34,6 +36,7 @@ namespace Networking.Client.Receiving
                 _players.CreatePlayer(playerData, isMine);
             }
 
+            WindowsManager.CreateWindow<Project.UI.Windows.PlayersTabWindow.PlayersTabWindow>();
             TextChatWindow.instance.AddMessage($"Joined to server as <color=#AFAFAF>{NetInfo.minePlayer.nickname}</color>. Players online: {packet.playersData.Length}");
         }
 
@@ -41,6 +44,7 @@ namespace Networking.Client.Receiving
         {
             _players?.CreatePlayer(packet.PlayerConnectionData, false);
             TextChatWindow.instance.AddMessage($"<color=#AFAFAF>{packet.PlayerConnectionData.nickname} has joined the server");
+            PlayersTabWindow.instance.AddPlayerToTab(packet.PlayerConnectionData.playerId);
         }
         
         private static void OnAnotherPlayerLeft(ServerAnotherPlayerLeft packet, NetPeer peer)
@@ -49,8 +53,9 @@ namespace Networking.Client.Receiving
             if (player == null)
                 return;
             
-            TextChatWindow.instance.AddMessage($"<color=#AFAFAF>{player.nickname} has left the server");
             _players.RemovePlayer(packet.playerId);
+            TextChatWindow.instance.AddMessage($"<color=#AFAFAF>{player.nickname} has left the server");
+            PlayersTabWindow.instance.RemovePlayerFromTab(packet.playerId);
         }
         
         

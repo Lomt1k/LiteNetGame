@@ -101,7 +101,12 @@ namespace Networking.Client
 
         public void OnNetworkLatencyUpdate(NetPeer peer, int latency)
         {
-            NetInfo.minePlayer?.UpdatePing(latency);
+            var minePlayer = NetInfo.minePlayer;
+            if (minePlayer == null)
+                return;
+            
+            minePlayer.UpdatePing(latency);
+            Project.UI.Windows.PlayersTabWindow.PlayersTabWindow.instance?.RefreshPing(minePlayer);
         }
 
         public void OnConnectionRequest(ConnectionRequest request)
