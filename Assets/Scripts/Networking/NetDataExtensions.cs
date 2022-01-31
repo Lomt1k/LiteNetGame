@@ -91,15 +91,15 @@ namespace Networking
         }
         
         // SendablePlayerData
-        public static void Put(this NetDataWriter writer, SendablePlayerData data)
+        public static void Put(this NetDataWriter writer, PlayerConnectionData connectionData)
         {
-            writer.Put(data.playerId);
-            writer.Put(data.nickname);
+            writer.Put(connectionData.playerId);
+            writer.Put(connectionData.nickname);
         }
         
-        public static SendablePlayerData GetSendablePlayerData(this NetDataReader reader)
+        public static PlayerConnectionData GetSendablePlayerData(this NetDataReader reader)
         {
-            return new SendablePlayerData
+            return new PlayerConnectionData
             {
                 playerId = reader.GetUShort(),
                 nickname = reader.GetString()
@@ -107,7 +107,7 @@ namespace Networking
         }
         
         // SendablePlayerData[]
-        public static void Put(this NetDataWriter writer, SendablePlayerData[] dataArray)
+        public static void Put(this NetDataWriter writer, PlayerConnectionData[] dataArray)
         {
             writer.Put(dataArray.Length);
             foreach (var data in dataArray)
@@ -116,14 +116,14 @@ namespace Networking
             }
         }
         
-        public static SendablePlayerData[] GetSendablePlayerDataArray(this NetDataReader reader)
+        public static PlayerConnectionData[] GetSendablePlayerDataArray(this NetDataReader reader)
         {
             int size = reader.GetInt();
-            var resultArray = new SendablePlayerData[size];
+            var resultArray = new PlayerConnectionData[size];
             Debug.LogWarning($"size: {size}");
             for (int i = 0; i < size; i++)
             {
-                var data = new SendablePlayerData
+                var data = new PlayerConnectionData
                 {
                     playerId = reader.GetUShort(),
                     nickname = reader.GetString()

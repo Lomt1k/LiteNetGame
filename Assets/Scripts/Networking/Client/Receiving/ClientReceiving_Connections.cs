@@ -2,6 +2,7 @@
 using LiteNetLib.Utils;
 using Project.UI.Windows.TextChatWindow;
 using UnityEngine;
+using Networking.Server.Sending.Packets.Connections;
 
 namespace Networking.Client.Receiving
 {
@@ -38,8 +39,8 @@ namespace Networking.Client.Receiving
 
         private static void OnAnotherPlayerJoined(ServerAnotherPlayerJoined packet, NetPeer peer)
         {
-            _players?.CreatePlayer(packet.playerData, false);
-            TextChatWindow.instance.AddMessage($"<color=#AFAFAF>{packet.playerData.nickname} has joined the server");
+            _players?.CreatePlayer(packet.PlayerConnectionData, false);
+            TextChatWindow.instance.AddMessage($"<color=#AFAFAF>{packet.PlayerConnectionData.nickname} has joined the server");
         }
         
         private static void OnAnotherPlayerLeft(ServerAnotherPlayerLeft packet, NetPeer peer)

@@ -1,23 +1,24 @@
 ﻿using LiteNetLib;
 using LiteNetLib.Utils;
-using Networking;
-using Networking.Client;
 using Project.UI.Windows.TextChatWindow;
-using UnityEngine;
+using Networking.Server.Sending.Packets.TextChat;
 
-public static class ClientReceiving_TextChat
+namespace Networking.Client.Receiving
 {
-    private static ClientPlayers _players => GameClient.instance.players;
-        
-    public static void SubscribeToReceivedPackets(NetPacketProcessor packetProcessor)
+    public static class ClientReceiving_TextChat
     {
-        packetProcessor.SubscribeReusable<ServerTextChatMessagePacket, NetPeer>(OnTextChat);
-    }
+        private static ClientPlayers _players => GameClient.instance.players;
         
-    private static void OnTextChat(ServerTextChatMessagePacket packet, NetPeer peer)
-    {
-        Debug.Log($"ClientReceiving :: OnTextChat {packet.text}");
-        TextChatWindow.instance?.AddMessage(packet.text);
-    }
+        public static void SubscribeToReceivedPackets(NetPacketProcessor packetProcessor)
+        {
+            packetProcessor.SubscribeReusable<ServerTextChatMessagePacket, NetPeer>(OnTextChat);
+        }
+        
+        private static void OnTextChat(ServerTextChatMessagePacket packet, NetPeer peer)
+        {
+            TextChatWindow.instance?.AddMessage(packet.text);
+        }
     
+    }
 }
+

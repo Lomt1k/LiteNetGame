@@ -3,10 +3,10 @@ namespace Networking.Client
 {
     public class ClientPlayer : BasePlayer
     {
-        public ClientPlayer(SendablePlayerData playerData)
+        public ClientPlayer(PlayerConnectionData playerConnectionData)
         {
-            this.playerId = playerData.playerId;
-            this.nickname = playerData.nickname;
+            this.playerId = playerConnectionData.playerId;
+            this.nickname = playerConnectionData.nickname;
         }
     }
 }

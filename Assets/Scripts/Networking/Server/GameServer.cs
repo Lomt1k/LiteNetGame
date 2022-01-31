@@ -73,7 +73,7 @@ namespace Networking.Server
             if (disconnectedPlayer == null)
                 return;
 
-            Sending.ServerSending_Connections.SendAnotherPlayerLeft(disconnectedPlayer);
+            Sending.ServerSending_Connections.SendPlayerDisconnectInfoToAll(disconnectedPlayer);
             players.RemovePlayer(peer);
         }
 

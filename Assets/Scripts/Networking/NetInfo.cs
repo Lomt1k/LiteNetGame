@@ -1,7 +1,6 @@
 ﻿namespace Networking
 {
     using Client;
-    using Server;
     
     public enum NetMode : byte
     {
@@ -18,17 +17,17 @@
         public const byte minNicknameLength = 3;
         public const byte maxNicknameLength = 24;
 
-        public static NetMode mode { get; private set; } = NetMode.None;
+        private static NetMode _mode = NetMode.None;
 
-        public static bool isServer => mode == NetMode.Server || mode == NetMode.Host;
-        public static bool isClient => mode == NetMode.Client || mode == NetMode.Host;
-        public static bool isHost => mode == NetMode.Host;
+        public static bool isServer => _mode == NetMode.Server || _mode == NetMode.Host;
+        public static bool isClient => _mode == NetMode.Client || _mode == NetMode.Host;
+        public static bool isHost => _mode == NetMode.Host;
         
         public static ClientPlayer minePlayer => GameClient.instance?.players?.minePlayer;
 
-        public static void SetMode(NetMode _mode)
+        public static void SetMode(NetMode mode)
         {
-            mode = _mode;
+            _mode = mode;
         }
 
 

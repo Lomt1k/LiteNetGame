@@ -2,6 +2,8 @@
 
 namespace Networking.Client.Sending
 {
+    using Packets.TextChat;
+    
     public static class ClientSending_TextChat
     {
         private static ClientPacketSender sender => GameClient.instance.sender;
