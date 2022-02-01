@@ -1,4 +1,6 @@
 ﻿
+using Project.UI.Windows.PlayersTabWindow;
+
 namespace Networking.Client
 {
     public sealed class ClientPlayer : BasePlayer
@@ -14,6 +16,7 @@ namespace Networking.Client
         public void UpdatePing(int latency)
         {
             this.ping = latency;
+            PlayersTabWindow.instance?.RefreshPing(this);
         }
     }
 }

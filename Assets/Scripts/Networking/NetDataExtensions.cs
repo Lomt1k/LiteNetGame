@@ -14,6 +14,8 @@ namespace Networking
             
             pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetPlayerConnectionData());
             pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetPlayerConnectionDataArray());
+            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetPlayerPingInfo());
+            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetPlayerPingInfoArray());
         }
         
         // Vector2
@@ -127,7 +129,50 @@ namespace Networking
                 var data = new PlayerConnectionData
                 {
                     playerId = reader.GetUShort(),
+                    ping = reader.GetUShort(),
                     nickname = reader.GetString()
+                };
+                resultArray[i] = data;
+            }
+            return resultArray;
+        }
+        
+        // PlayerPingInfo
+        public static void Put(this NetDataWriter writer, PlayerPingInfo pingInfo)
+        {
+            writer.Put(pingInfo.playerId);
+            writer.Put(pingInfo.ping);
+        }
+        
+        public static PlayerPingInfo GetPlayerPingInfo(this NetDataReader reader)
+        {
+            return new PlayerPingInfo
+            {
+                playerId = reader.GetUShort(),
+                ping = reader.GetUShort()
+            };
+        }
+        
+        // PlayerPingInfo[]
+        public static void Put(this NetDataWriter writer, PlayerPingInfo[] pingInfoArray)
+        {
+            writer.Put(pingInfoArray.Length);
+            foreach (var pingInfo in pingInfoArray)
+            {
+                writer.Put(pingInfo);
+            }
+        }
+        
+        public static PlayerPingInfo[] GetPlayerPingInfoArray(this NetDataReader reader)
+        {
+            int size = reader.GetInt();
+            var resultArray = new PlayerPingInfo[size];
+            for (int i = 0; i < size; i++)
+            {
+                var data = new PlayerPingInfo
+                {
+                    playerId = reader.GetUShort(),
+                    ping = reader.GetUShort()
                 };
                 resultArray[i] = data;
             }

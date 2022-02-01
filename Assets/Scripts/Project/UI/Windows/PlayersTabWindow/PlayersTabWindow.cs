@@ -8,6 +8,7 @@ namespace Project.UI.Windows.PlayersTabWindow
     public class PlayersTabWindow : Window
     {
         public const string prefabPath = "Prefabs/UI/Windows/PlayersTabWindow/PlayersTabWindow";
+        public const float requestPingFrequency = 5f;
         public static PlayersTabWindow instance;
 
         [SerializeField] private PlayersTabItem _itemPrefab;
@@ -19,6 +20,7 @@ namespace Project.UI.Windows.PlayersTabWindow
         private bool _isTabInitializationStarted;
         private bool _isTabInitialized;
         private bool _currentVisibleState;
+        private float _currentRequestPingTime;
 
         private ClientPlayers _clientPlayers;
 
@@ -108,6 +110,16 @@ namespace Project.UI.Windows.PlayersTabWindow
             {
                 SetVisible(!_currentVisibleState);
             }
+
+            if (!_currentVisibleState)
+                return;
+
+            _currentRequestPingTime -= Time.unscaledDeltaTime;
+            if (_currentRequestPingTime < float.Epsilon)
+            {
+                RequestUpdatePlayersPingInfo();
+                _currentRequestPingTime = requestPingFrequency;
+            }
         }
 
         private void SetVisible(bool state)
@@ -116,12 +128,19 @@ namespace Project.UI.Windows.PlayersTabWindow
             _canvasGroup.blocksRaycasts = state;
             _canvasGroup.interactable = state;
             _currentVisibleState = state;
-
+            
+            //TODO перенести инициализацию на момент создания окна, а окно создавать в окне загрузки
             if (state && !_isTabInitializationStarted)
             {
                 _isTabInitializationStarted = true;
                 Initialize();
             }
+        }
+
+        private static void RequestUpdatePlayersPingInfo()
+        {
+            Debug.Log($"RequestUpdatePlayersPingInfo");
+            Networking.Client.Sending.ClientSending_Connections.RequestPlayerPings();
         }
 
         private void OnDestroy()

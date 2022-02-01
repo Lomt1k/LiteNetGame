@@ -19,4 +19,9 @@ namespace Networking.Server.Sending.Packets.Connections
         public ushort playerId { get; set; }
     }
     
+    public class PlayersPingInfoPacket : ServerPacket
+    {
+        public PlayerPingInfo[] playersPingInfo { get; set; }
+    }
+    
 }

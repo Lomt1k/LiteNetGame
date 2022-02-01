@@ -4,6 +4,8 @@
     {
         public string nickname { get; set; }
     }
+
+    public class RequestPlayerPingsPacket : ClientPacket { }
     
     
 }

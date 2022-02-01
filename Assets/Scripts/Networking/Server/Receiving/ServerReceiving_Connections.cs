@@ -12,6 +12,7 @@ namespace Networking.Server.Receiving
         public static void SubscribeToReceivedPackets(NetPacketProcessor packetProcessor)
         {
             packetProcessor.SubscribeReusable<JoinToServerPacket, NetPeer>(OnPlayerJoined);
+            packetProcessor.SubscribeReusable<RequestPlayerPingsPacket, NetPeer>(OnRequestPlayerPings);
         }
         
         private static void OnPlayerJoined(JoinToServerPacket packet, NetPeer peer)
@@ -24,6 +25,15 @@ namespace Networking.Server.Receiving
             Sending.ServerSending_Connections.SendInfoAboutAllConnections(newPlayer);
             
             Sending.ServerSending_Connections.SendNewConnectionInfoToAll(newPlayer);
+        }
+
+        private static void OnRequestPlayerPings(RequestPlayerPingsPacket packet, NetPeer peer)
+        {
+            var senderPlayer = players[peer.Id];
+            if (senderPlayer == null)
+                return;
+            
+            Sending.ServerSending_Connections.SendAllPlayersPingInfo(senderPlayer);
         }
         
         

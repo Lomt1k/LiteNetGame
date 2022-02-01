@@ -13,6 +13,11 @@ namespace Networking.Client.Sending
         {
             sender.SendPacket(new JoinToServerPacket {nickname = nickname}, DeliveryMethod.ReliableOrdered);
         }
+
+        public static void RequestPlayerPings()
+        {
+            sender.SendPacket(new RequestPlayerPingsPacket(), DeliveryMethod.Unreliable);
+        }
         
     }
 }

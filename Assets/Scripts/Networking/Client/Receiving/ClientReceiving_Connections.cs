@@ -17,6 +17,7 @@ namespace Networking.Client.Receiving
             packetProcessor.SubscribeReusable<AfterJoinInfoPacket, NetPeer>(OnAfterJoinInfoReceived);
             packetProcessor.SubscribeReusable<ServerAnotherPlayerJoined, NetPeer>(OnAnotherPlayerJoined);
             packetProcessor.SubscribeReusable<ServerAnotherPlayerLeft, NetPeer>(OnAnotherPlayerLeft);
+            packetProcessor.SubscribeReusable<PlayersPingInfoPacket, NetPeer>(OnUpdatePlayersPingInfo);
         }
         
         private static void OnAfterJoinInfoReceived(AfterJoinInfoPacket packet, NetPeer peer)
@@ -36,7 +37,7 @@ namespace Networking.Client.Receiving
                 _players.CreatePlayer(playerData, isMine);
             }
 
-            WindowsManager.CreateWindow<Project.UI.Windows.PlayersTabWindow.PlayersTabWindow>();
+            WindowsManager.CreateWindow<PlayersTabWindow>();
             TextChatWindow.instance.AddMessage($"Joined to server as <color=#AFAFAF>{NetInfo.minePlayer.nickname}</color>. Players online: {packet.playersData.Length}");
         }
 
@@ -56,6 +57,14 @@ namespace Networking.Client.Receiving
             _players.RemovePlayer(packet.playerId);
             TextChatWindow.instance.AddMessage($"<color=#AFAFAF>{player.nickname} has left the server");
             PlayersTabWindow.instance.RemovePlayerFromTab(packet.playerId);
+        }
+
+        private static void OnUpdatePlayersPingInfo(PlayersPingInfoPacket packet, NetPeer peer)
+        {
+            foreach (var info in packet.playersPingInfo)
+            {
+                _players[info.playerId]?.UpdatePing(info.ping);
+            }
         }
         
         

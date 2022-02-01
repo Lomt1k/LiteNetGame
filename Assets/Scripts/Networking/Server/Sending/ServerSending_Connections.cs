@@ -58,6 +58,36 @@ namespace Networking.Server.Sending
             var packet = new ServerAnotherPlayerLeft {playerId = (ushort) disconnectedPlayer.playerId};
             sender.SendPacketToAll(packet, DeliveryMethod.ReliableOrdered, disconnectedPlayer);
         }
+
+        public static void SendAllPlayersPingInfo(ServerPlayer targetPlayer)
+        {
+            var dataArray = new PlayerPingInfo[players.playersOnline];
+            int dataArrayIndex = 0;
+            for (int i = 0; i < players.maxPlayers; i++)
+            {
+                var serverPlayer = players[i];
+                if (serverPlayer == null)
+                    continue;
+                
+                dataArray[dataArrayIndex] = new PlayerPingInfo
+                {
+                    playerId = (ushort) serverPlayer.playerId,
+                    ping = (ushort) serverPlayer.peer.Ping
+                };
+                    
+                dataArrayIndex++;
+                if (dataArrayIndex == players.playersOnline)
+                    break;
+            }
+                
+            var packet = new PlayersPingInfoPacket
+            {
+                playersPingInfo = dataArray
+            };
+            
+            sender.SendPacket(targetPlayer, packet, DeliveryMethod.Unreliable);
+        }
+        
         
         
 
