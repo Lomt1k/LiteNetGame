@@ -10,6 +10,7 @@ namespace Project
         private void Start()
         {
             #if SERVER_ONLY
+            Application.targetFrameRate = 60;
             NetStarter.TryStartServer(5555, 1000);
             #else
             WindowsManager.CreateWindow<StartGameWindow>();
