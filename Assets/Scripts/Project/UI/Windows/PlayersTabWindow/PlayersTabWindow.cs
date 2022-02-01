@@ -139,7 +139,6 @@ namespace Project.UI.Windows.PlayersTabWindow
 
         private static void RequestUpdatePlayersPingInfo()
         {
-            Debug.Log($"RequestUpdatePlayersPingInfo");
             Networking.Client.Sending.ClientSending_Connections.RequestPlayerPings();
         }
 
