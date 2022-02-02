@@ -20,7 +20,7 @@ namespace Project.UI.Windows.PlayersTabWindow
         private bool _isTabInitializationStarted;
         private bool _isTabInitialized;
         private bool _currentVisibleState;
-        private float _currentRequestPingTime;
+        private float _lastRequestPingTime;
 
         private ClientPlayers _clientPlayers;
 
@@ -114,11 +114,10 @@ namespace Project.UI.Windows.PlayersTabWindow
             if (!_currentVisibleState)
                 return;
 
-            _currentRequestPingTime -= Time.unscaledDeltaTime;
-            if (_currentRequestPingTime < float.Epsilon)
+            if (Time.unscaledDeltaTime - _lastRequestPingTime > requestPingFrequency)
             {
+                _lastRequestPingTime = Time.unscaledDeltaTime;
                 RequestUpdatePlayersPingInfo();
-                _currentRequestPingTime = requestPingFrequency;
             }
         }
 

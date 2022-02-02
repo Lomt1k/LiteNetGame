@@ -6,12 +6,10 @@ using UnityEngine;
 
 namespace Networking.Server
 {
-    public class GameServer : MonoBehaviour, INetEventListener
+    public class GameServer : MonoSingletone<GameServer>, INetEventListener
     {
         private readonly int defaultPort = 7777;
         private readonly int defaultMaxPlayers = 1000;
-        
-        public static GameServer instance { get; set; }
         
         private NetManager _netManager;
         private ServerPacketSender _packetSender;
@@ -24,13 +22,7 @@ namespace Networking.Server
 
         private void Awake()
         {
-            instance = this;
-        }
-
-        [ContextMenu(nameof(StartServer))]
-        public void StartServer()
-        {
-            StartServer(defaultPort, defaultMaxPlayers);
+            DontDestroyOnLoad(gameObject);
         }
 
         public void StartServer(int port, int maxPlayers)
