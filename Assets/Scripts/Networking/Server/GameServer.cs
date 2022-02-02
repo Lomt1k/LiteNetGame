@@ -8,9 +8,6 @@ namespace Networking.Server
 {
     public class GameServer : MonoSingletone<GameServer>, INetEventListener
     {
-        private readonly int defaultPort = 7777;
-        private readonly int defaultMaxPlayers = 1000;
-        
         private NetManager _netManager;
         private ServerPacketSender _packetSender;
         private ServerPacketReceiver _packetReceiver;

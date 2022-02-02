@@ -17,8 +17,7 @@ namespace Project.UI.Windows.PlayersTabWindow
         [SerializeField] private CanvasGroup _canvasGroup;
 
         private PlayersTabItem[] _playerItems;
-        private bool _isTabInitializationStarted;
-        private bool _isTabInitialized;
+        private bool _isInitialized;
         private bool _currentVisibleState;
         private float _lastRequestPingTime;
 
@@ -32,14 +31,14 @@ namespace Project.UI.Windows.PlayersTabWindow
             instance = this;
             _clientPlayers = GameClient.instance.players;
             _playerItems = new PlayersTabItem[_clientPlayers.maxPlayers];
+            Initialize();
             RefreshPlayersOnline();
             SetVisible(false);
         }
 
-        //TODO позже обязательно перенести инициализацию на момент загрузочного экрана! Жрет много!
         public void Initialize()
         {
-            _playersTabContent.gameObject.SetActive(false);
+            gameObject.SetActive(false);
             for (int i = 0; i < _playerItems.Length; i++)
             {
                 var tabItem = Instantiate(_itemPrefab, _playersTabContent).GetComponent<PlayersTabItem>();
@@ -57,8 +56,8 @@ namespace Project.UI.Windows.PlayersTabWindow
 
             var minePlayerId = NetInfo.minePlayer.playerId;
             _playerItems[minePlayerId].transform.SetAsFirstSibling();
-            _playersTabContent.gameObject.SetActive(true);
-            _isTabInitialized = true;
+            gameObject.SetActive(true);
+            _isInitialized = true;
             
             _onInitialized?.Invoke();
             _onInitialized = null;
@@ -67,7 +66,7 @@ namespace Project.UI.Windows.PlayersTabWindow
         public void AddPlayerToTab(int playerId)
         {
             RefreshPlayersOnline();
-            if (_isTabInitialized)
+            if (_isInitialized)
             {
                 _playerItems[playerId].SetData(_clientPlayers[playerId]);
                 _playerItems[playerId].gameObject.SetActive(true);
@@ -83,7 +82,7 @@ namespace Project.UI.Windows.PlayersTabWindow
         public void RemovePlayerFromTab(int playerId)
         {
             RefreshPlayersOnline();
-            if (_isTabInitialized)
+            if (_isInitialized)
             {
                 _playerItems[playerId].gameObject.SetActive(false);
             }
@@ -92,7 +91,7 @@ namespace Project.UI.Windows.PlayersTabWindow
 
         public void RefreshPing(ClientPlayer player)
         {
-            if (_isTabInitialized)
+            if (_isInitialized)
             {
                 _playerItems[player.playerId].UpdatePing(player.ping);
             }
@@ -127,13 +126,6 @@ namespace Project.UI.Windows.PlayersTabWindow
             _canvasGroup.blocksRaycasts = state;
             _canvasGroup.interactable = state;
             _currentVisibleState = state;
-            
-            //TODO перенести инициализацию на момент создания окна, а окно создавать в окне загрузки
-            if (state && !_isTabInitializationStarted)
-            {
-                _isTabInitializationStarted = true;
-                Initialize();
-            }
         }
 
         private static void RequestUpdatePlayersPingInfo()

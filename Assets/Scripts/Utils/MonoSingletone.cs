@@ -10,7 +10,7 @@ public class MonoSingletone<T> : MonoBehaviour where T: MonoBehaviour
         {
             if (_instance == null)
             {
-                _instance = new GameObject(nameof(T)).AddComponent<T>();
+                _instance = new GameObject(typeof(T).Name).AddComponent<T>();
             }
             return _instance;
         }
