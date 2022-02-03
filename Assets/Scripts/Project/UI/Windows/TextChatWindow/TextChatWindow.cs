@@ -8,7 +8,7 @@ namespace Project.UI.Windows.TextChatWindow
 {
     public class TextChatWindow : Window
     {
-        public const string prefabPath = "Prefabs/UI/Windows/TextChatWindow/Text Chat Window";
+        public const string prefabPath = "Prefabs/UI/Windows/TextChatWindow/TextChatWindow";
         public const int maxMessages = 100;
 
         public static TextChatWindow instance;
@@ -19,6 +19,7 @@ namespace Project.UI.Windows.TextChatWindow
         [SerializeField] private TMP_InputField _inputField;
         [SerializeField] private CanvasGroup _inputFieldGroup;
         [SerializeField] private CanvasGroup _scrollGroup;
+        [SerializeField] private Image _scrollViewBackground;
 
         private Queue<TextMessage> _messages = new Queue<TextMessage>(maxMessages);
         private Coroutine _scrollCoroutine;
@@ -63,6 +64,7 @@ namespace Project.UI.Windows.TextChatWindow
             _inputFieldGroup.alpha = state ? 1f : 0f;
             _inputFieldGroup.interactable = state;
             _inputFieldGroup.blocksRaycasts = state;
+            _scrollViewBackground.enabled = state;
             _isInputFieldActive = state;
 
             if (!state)
