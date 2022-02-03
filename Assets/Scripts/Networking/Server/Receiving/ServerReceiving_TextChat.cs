@@ -2,6 +2,7 @@
 using LiteNetLib;
 using LiteNetLib.Utils;
 using UnityEngine;
+using Networking.Client.Sending.Packets.TextChat;
 
 namespace Networking.Server.Receiving
 {

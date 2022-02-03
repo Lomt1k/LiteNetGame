@@ -1,12 +1,22 @@
 ﻿
+using Project.UI.Windows.PlayersTabWindow;
+
 namespace Networking.Client
 {
-    public class ClientPlayer : BasePlayer
+    public sealed class ClientPlayer : BasePlayer
     {
-        public ClientPlayer(SendablePlayerData playerData)
+        
+        public ClientPlayer(PlayerConnectionData playerConnectionData)
         {
-            this.playerId = playerData.playerId;
-            this.nickname = playerData.nickname;
+            this.playerId = playerConnectionData.playerId;
+            this.ping = playerConnectionData.ping;
+            this.nickname = playerConnectionData.nickname;
+        }
+
+        public void UpdatePing(int latency)
+        {
+            this.ping = latency;
+            PlayersTabWindow.instance?.RefreshPing(this);
         }
     }
 }

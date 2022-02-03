@@ -1,23 +1,17 @@
 ﻿
-namespace Networking
+namespace Networking.Server.Sending.Packets.Connections
 {
-    public abstract class ServerPacket { }
     
     public class AfterJoinInfoPacket : ServerPacket
     {
         public ushort maxPlayers { get; set; }
         public ushort minePlayerId { get; set; }
-        public SendablePlayerData[] playersData { get; set; }
+        public PlayerConnectionData[] playersData { get; set; }
     }
     
-    public class ServerTextChatMessagePacket : ServerPacket
-    {
-        public string text { get; set; }
-    }
-
     public class ServerAnotherPlayerJoined : ServerPacket
     {
-        public SendablePlayerData playerData { get; set; }
+        public PlayerConnectionData PlayerConnectionData { get; set; }
     }
     
     public class ServerAnotherPlayerLeft : ServerPacket
@@ -25,5 +19,9 @@ namespace Networking
         public ushort playerId { get; set; }
     }
     
+    public class PlayersPingInfoPacket : ServerPacket
+    {
+        public PlayerPingInfo[] playersPingInfo { get; set; }
+    }
     
 }

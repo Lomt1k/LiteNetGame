@@ -10,10 +10,8 @@ namespace Networking.Client
 {
     using Sending;
     
-    public class GameClient : MonoBehaviour, INetEventListener
+    public class GameClient : MonoSingletone<GameClient>, INetEventListener
     {
-        public static GameClient instance { get; set; }
-        
         private NetManager _netManager;
         private NetPeer _server;
         private ClientPacketSender _packetSender;
@@ -28,7 +26,7 @@ namespace Networking.Client
 
         private void Awake()
         {
-            instance = this;
+            DontDestroyOnLoad(gameObject);
             Application.quitting += OnApplicationQuitting;
         }
 
@@ -101,6 +99,7 @@ namespace Networking.Client
 
         public void OnNetworkLatencyUpdate(NetPeer peer, int latency)
         {
+            NetInfo.minePlayer?.UpdatePing(latency);
         }
 
         public void OnConnectionRequest(ConnectionRequest request)

@@ -17,9 +17,9 @@ namespace Networking.Client
         
         public ClientPlayer this[int index] => _players[index];
         
-        public ClientPlayer CreatePlayer(SendablePlayerData playerData, bool isMine)
+        public ClientPlayer CreatePlayer(PlayerConnectionData playerConnectionData, bool isMine)
         {
-            var clientPlayer = new ClientPlayer(playerData);
+            var clientPlayer = new ClientPlayer(playerConnectionData);
             var playerId = clientPlayer.playerId;
             _players[playerId] = clientPlayer;
             playersOnline++;

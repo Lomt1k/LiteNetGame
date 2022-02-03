@@ -2,24 +2,27 @@
 
 namespace Networking.Server.Sending
 {
+    using Packets.Connections;
+    
     public static class ServerSending_Connections
     {
         private static ServerPacketSender sender => GameServer.instance.sender;
         private static ServerPlayers players => GameServer.instance.players;
 
-        public static void SendAfterJoinServerInfo(ServerPlayer targetPlayer)
+        public static void SendInfoAboutAllConnections(ServerPlayer targetPlayer)
         {
-            var dataArray = new SendablePlayerData[players.playersOnline];
+            var dataArray = new PlayerConnectionData[players.playersOnline];
             int dataArrayIndex = 0;
             for (int i = 0; i < players.maxPlayers; i++)
             {
                 var serverPlayer = players[i];
-                if (players[i] == null)
+                if (serverPlayer == null)
                     continue;
                 
-                dataArray[dataArrayIndex] = new SendablePlayerData
+                dataArray[dataArrayIndex] = new PlayerConnectionData
                 {
                     playerId = (ushort) serverPlayer.playerId,
+                    ping = (ushort) serverPlayer.peer.Ping,
                     nickname = serverPlayer.nickname
                 };
                     
@@ -38,22 +41,53 @@ namespace Networking.Server.Sending
             sender.SendPacket(targetPlayer, packet, DeliveryMethod.ReliableOrdered);
         }
 
-        public static void SendAnotherPlayerJoined(ServerPlayer anotherPlayer)
+        public static void SendNewConnectionInfoToAll(ServerPlayer newPlayer)
         {
-            var playerData = new SendablePlayerData
+            var playerData = new PlayerConnectionData
             {
-                playerId = (ushort) anotherPlayer.playerId,
-                nickname = anotherPlayer.nickname
+                playerId = (ushort) newPlayer.playerId,
+                ping = (ushort) newPlayer.peer.Ping,
+                nickname = newPlayer.nickname
             };
-            var packet = new ServerAnotherPlayerJoined {playerData = playerData};
-            sender.SendPacketToAll(packet, DeliveryMethod.ReliableOrdered, anotherPlayer);
+            var packet = new ServerAnotherPlayerJoined {PlayerConnectionData = playerData};
+            sender.SendPacketToAll(packet, DeliveryMethod.ReliableOrdered, newPlayer);
         }
         
-        public static void SendAnotherPlayerLeft(ServerPlayer anotherPlayer)
+        public static void SendPlayerDisconnectInfoToAll(ServerPlayer disconnectedPlayer)
         {
-            var packet = new ServerAnotherPlayerLeft {playerId = (ushort) anotherPlayer.playerId};
-            sender.SendPacketToAll(packet, DeliveryMethod.ReliableOrdered, anotherPlayer);
+            var packet = new ServerAnotherPlayerLeft {playerId = (ushort) disconnectedPlayer.playerId};
+            sender.SendPacketToAll(packet, DeliveryMethod.ReliableOrdered, disconnectedPlayer);
         }
+
+        public static void SendAllPlayersPingInfo(ServerPlayer targetPlayer)
+        {
+            var dataArray = new PlayerPingInfo[players.playersOnline];
+            int dataArrayIndex = 0;
+            for (int i = 0; i < players.maxPlayers; i++)
+            {
+                var serverPlayer = players[i];
+                if (serverPlayer == null)
+                    continue;
+                
+                dataArray[dataArrayIndex] = new PlayerPingInfo
+                {
+                    playerId = (ushort) serverPlayer.playerId,
+                    ping = (ushort) serverPlayer.peer.Ping
+                };
+                    
+                dataArrayIndex++;
+                if (dataArrayIndex == players.playersOnline)
+                    break;
+            }
+                
+            var packet = new PlayersPingInfoPacket
+            {
+                playersPingInfo = dataArray
+            };
+            
+            sender.SendPacket(targetPlayer, packet, DeliveryMethod.Unreliable);
+        }
+        
         
         
 

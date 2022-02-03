@@ -7,7 +7,7 @@ namespace Project.UI.Windows.StartGameWindow
 {
     public class StartGameWindow : Window
     {
-        public const string prefabPath = "Prefabs/UI/Windows/StartGameWindow/Start Game Window";
+        public const string prefabPath = "Prefabs/UI/Windows/StartGameWindow/StartGameWindow";
         public const string defaultIp = "127.0.0.1";
         public const int defaultPort = 5555;
         public const int defaultMaxPlayers = 1000;

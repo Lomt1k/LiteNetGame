@@ -12,8 +12,10 @@ namespace Networking
             pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetVector4());
             pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetQuaternion());
             
-            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetSendablePlayerData());
-            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetSendablePlayerDataArray());
+            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetPlayerConnectionData());
+            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetPlayerConnectionDataArray());
+            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetPlayerPingInfo());
+            pc.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetPlayerPingInfoArray());
         }
         
         // Vector2
@@ -90,24 +92,26 @@ namespace Networking
             };
         }
         
-        // SendablePlayerData
-        public static void Put(this NetDataWriter writer, SendablePlayerData data)
+        // PlayerConnectionData
+        public static void Put(this NetDataWriter writer, PlayerConnectionData connectionData)
         {
-            writer.Put(data.playerId);
-            writer.Put(data.nickname);
+            writer.Put(connectionData.playerId);
+            writer.Put(connectionData.ping);
+            writer.Put(connectionData.nickname);
         }
         
-        public static SendablePlayerData GetSendablePlayerData(this NetDataReader reader)
+        public static PlayerConnectionData GetPlayerConnectionData(this NetDataReader reader)
         {
-            return new SendablePlayerData
+            return new PlayerConnectionData
             {
                 playerId = reader.GetUShort(),
+                ping = reader.GetUShort(),
                 nickname = reader.GetString()
             };
         }
         
-        // SendablePlayerData[]
-        public static void Put(this NetDataWriter writer, SendablePlayerData[] dataArray)
+        // PlayerConnectionData[]
+        public static void Put(this NetDataWriter writer, PlayerConnectionData[] dataArray)
         {
             writer.Put(dataArray.Length);
             foreach (var data in dataArray)
@@ -116,19 +120,60 @@ namespace Networking
             }
         }
         
-        public static SendablePlayerData[] GetSendablePlayerDataArray(this NetDataReader reader)
+        public static PlayerConnectionData[] GetPlayerConnectionDataArray(this NetDataReader reader)
         {
             int size = reader.GetInt();
-            var resultArray = new SendablePlayerData[size];
-            Debug.LogWarning($"size: {size}");
+            var resultArray = new PlayerConnectionData[size];
             for (int i = 0; i < size; i++)
             {
-                var data = new SendablePlayerData
+                var data = new PlayerConnectionData
                 {
                     playerId = reader.GetUShort(),
+                    ping = reader.GetUShort(),
                     nickname = reader.GetString()
                 };
-                Debug.LogWarning($"id: {data.playerId} name {data.nickname}");
+                resultArray[i] = data;
+            }
+            return resultArray;
+        }
+        
+        // PlayerPingInfo
+        public static void Put(this NetDataWriter writer, PlayerPingInfo pingInfo)
+        {
+            writer.Put(pingInfo.playerId);
+            writer.Put(pingInfo.ping);
+        }
+        
+        public static PlayerPingInfo GetPlayerPingInfo(this NetDataReader reader)
+        {
+            return new PlayerPingInfo
+            {
+                playerId = reader.GetUShort(),
+                ping = reader.GetUShort()
+            };
+        }
+        
+        // PlayerPingInfo[]
+        public static void Put(this NetDataWriter writer, PlayerPingInfo[] pingInfoArray)
+        {
+            writer.Put(pingInfoArray.Length);
+            foreach (var pingInfo in pingInfoArray)
+            {
+                writer.Put(pingInfo);
+            }
+        }
+        
+        public static PlayerPingInfo[] GetPlayerPingInfoArray(this NetDataReader reader)
+        {
+            int size = reader.GetInt();
+            var resultArray = new PlayerPingInfo[size];
+            for (int i = 0; i < size; i++)
+            {
+                var data = new PlayerPingInfo
+                {
+                    playerId = reader.GetUShort(),
+                    ping = reader.GetUShort()
+                };
                 resultArray[i] = data;
             }
             return resultArray;
