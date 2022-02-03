@@ -8,8 +8,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Ubuntu-Medium Atlas Material
-  m_Shader: {fileID: 4800000, guid: 68e6db2ebdc24f95958faec2be5558d6, type: 3}
-  m_ShaderKeywords: 
+  m_Shader: {fileID: 4800000, guid: 55579a58ffc293e4181a0419892ced2f, type: 3}
+  m_ShaderKeywords: OUTLINE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -65,7 +65,7 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0
+    - _OutlineWidth: 0.2
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
     - _ScaleRatioA: 0.9
@@ -112,11 +112,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: Ubuntu-Medium SDF
+  m_Name: Ubuntu-Medium with outline
   m_EditorClassIdentifier: 
-  hashCode: -1909788884
+  hashCode: -1234381153
   material: {fileID: -937001274811816832}
-  materialHashCode: 1926422668
+  materialHashCode: -1300640801
   m_Version: 1.1.0
   m_SourceFontFileGUID: 4148befcf8fdd2d49ade42bffcbe7108
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 4148befcf8fdd2d49ade42bffcbe7108,
