@@ -24,12 +24,15 @@ namespace Project.Units.Server
 
         public void CreateUnitForPlayer(ServerPlayer player)
         {
+            //TODO установить position и rotation
             var position = Vector3.zero;
             var rotation = Quaternion.identity;
 
             var unit = Object.Instantiate(unitPrefab, position, rotation).GetComponent<ServerUnit>();
             unit.Initialize(player);
             player.SetupUnit(unit);
+            
+            ServerSending_Units.SendCreateControllableUnitForPlayer(player, position, rotation);
         }
         
         

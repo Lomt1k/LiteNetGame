@@ -1,10 +1,12 @@
 ﻿
 using Project.UI.Windows.PlayersTabWindow;
+using Project.Units.Client;
 
 namespace Networking.Client
 {
     public sealed class ClientPlayer : BasePlayer
     {
+        public ClientUnit unit { get; private set; }
         
         public ClientPlayer(PlayerConnectionData playerConnectionData)
         {
@@ -18,5 +20,12 @@ namespace Networking.Client
             this.ping = latency;
             PlayersTabWindow.instance?.RefreshPing(this);
         }
+        
+        public void SetupUnit(ClientUnit unit)
+        {
+            this.unit = unit;
+        }
+        
+        
     }
 }

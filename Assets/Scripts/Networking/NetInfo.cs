@@ -1,4 +1,5 @@
-﻿namespace Networking
+﻿
+namespace Networking
 {
     using Client;
     
@@ -24,6 +25,7 @@
         public static bool isHost => _mode == NetMode.Host;
         
         public static ClientPlayer minePlayer => GameClient.instance?.players?.minePlayer;
+        public static Project.Units.Client.ClientUnit mineUnit => minePlayer?.unit;
 
         public static void SetMode(NetMode mode)
         {

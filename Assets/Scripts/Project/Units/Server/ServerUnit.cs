@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Project.Units.Server
 {
-    public class ServerUnit : MonoBehaviour
+    public class ServerUnit : UnitBase
     {
         public ServerPlayer player { get; private set; }
         
