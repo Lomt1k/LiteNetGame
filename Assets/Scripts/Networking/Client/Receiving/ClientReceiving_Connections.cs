@@ -26,24 +26,21 @@ namespace Networking.Client.Receiving
             GameClient.instance.CreatePlayersList(packet.maxPlayers);
             _players = GameClient.instance.players;
             
-            Debug.Log($"ClientReceiving :: OnAfterJoinInfoReceived " +
-                      $"| minePlayerId: {packet.minePlayerId} " +
-                      $"| playersOnline: {packet.playersData.Length} " +
-                      $"| maxPlayers: {packet.maxPlayers}");
-            
             foreach (var playerData in packet.playersData)
             {
-                Debug.Log($"ClientReceiving :: Player created | [ID {playerData.playerId}] {playerData.nickname} (Ping {playerData.ping})");
                 bool isMine = playerData.playerId == packet.minePlayerId;
                 _players.CreatePlayer(playerData, isMine);
             }
             
-            TextChatWindow.instance.AddMessage($"Joined to server as <color=#AFAFAF>{NetInfo.minePlayer.nickname}</color>. Players online: {packet.playersData.Length}");
-            
             SceneLoader.instance.LoadScene(SceneType.GameWorld, () =>
             {
+                //--- on loading
                 WindowsManager.CreateWindow<PlayersTabWindow>();
-                //TODO
+            },() =>
+            {
+                //--- on loading ends
+                TextChatWindow.instance.AddMessage($"Joined to server as <color=#AFAFAF>{NetInfo.minePlayer.nickname}</color>. Players online: {packet.playersData.Length}");
+                Project.Units.Client.ClientSending_Units.RequestCreateMineUnit();
             });
         }
 

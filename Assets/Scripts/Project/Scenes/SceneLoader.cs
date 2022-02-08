@@ -26,7 +26,7 @@ namespace Project.Scenes
             }
         }
 
-        public void LoadScene(SceneType sceneType, Action onLoading = null)
+        public void LoadScene(SceneType sceneType, Action onLoading = null, Action onLoadingEnds = null)
         {
             if (sceneType == SceneType.LoadingScene)
             {
@@ -44,6 +44,7 @@ namespace Project.Scenes
             {
                 isLoading = false;
                 _loadingWindow.Close();
+                onLoadingEnds?.Invoke();
             };
         }
         
