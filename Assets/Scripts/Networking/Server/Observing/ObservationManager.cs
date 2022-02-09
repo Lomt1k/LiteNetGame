@@ -70,13 +70,13 @@ namespace Networking.Server.Observing
             {
                 _stopwatch.Restart();
                 RebuildArrays();
-                Debug.Log($"Start ObservationUpdate | cycle time ms {_stopwatch.ElapsedMilliseconds}");
+                //Debug.Log($"Start ObservationUpdate | cycle time ms {_stopwatch.ElapsedMilliseconds}");
                 
                 await Task.Run(RefreshUnitObservers);
-                Debug.Log($"Unit Observers Refreshed | cycle time ms {_stopwatch.ElapsedMilliseconds}");
+                //Debug.Log($"Unit Observers Refreshed | cycle time ms {_stopwatch.ElapsedMilliseconds}");
 
                 await Task.Run(RefreshObserversWithoutUnit);
-                Debug.Log($"Another observers Refreshed | cycle time ms {_stopwatch.ElapsedMilliseconds}");
+                //Debug.Log($"Another observers Refreshed | cycle time ms {_stopwatch.ElapsedMilliseconds}");
 
                 var cycleWorkTime = _stopwatch.ElapsedMilliseconds;
                 if (cycleWorkTime < observingFrequencyInMilliseconds)
@@ -132,7 +132,7 @@ namespace Networking.Server.Observing
             {
 
                 bool prevState = unitA.observedObjects.Contains(unitB);
-                bool newState = Vector3.Distance(unitA.position, unitB.position) < observationDistance;
+                bool newState = Vector3.Distance(unitA.transformData.position, unitB.transformData.position) < observationDistance;
 
                 if (newState == prevState)
                     return;

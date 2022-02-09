@@ -8,4 +8,18 @@ namespace Project.Units.Server.Packets
         public Vector3 position { get; set; }
         public Quaternion rotation { get; set; }
     }
+
+    public class AddObservingUnitPacket : ServerPacket
+    {
+        public ushort playerId { get; set; }
+        public Vector3 position { get; set; }
+        public Quaternion rotation { get; set; }
+    }
+
+    public class RemoveObservingUnitPacket : ServerPacket
+    {
+        public ushort playerId { get; set; }
+    }
+    
+    
 }

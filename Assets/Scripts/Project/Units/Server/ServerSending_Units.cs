@@ -20,6 +20,26 @@ namespace Project.Units.Server
             };
             sender.SendPacket(player, packet, DeliveryMethod.ReliableOrdered);
         }
+
+        public static void SendAddObservingUnit(NetPeer observerPeer, ServerUnit unit)
+        {
+            var packet = new AddObservingUnitPacket
+            {
+                playerId = (ushort) unit.player.playerId,
+                position = unit.transformData.position,
+                rotation = unit.transformData.rotation
+            };
+            sender.SendPacket(observerPeer, packet, DeliveryMethod.ReliableOrdered);
+        }
+
+        public static void SendRemoveObservingUnit(NetPeer observerPeer, ServerUnit unit)
+        {
+            var packet = new RemoveObservingUnitPacket()
+            {
+                playerId = (ushort)unit.player.playerId
+            };
+            sender.SendPacket(observerPeer, packet, DeliveryMethod.ReliableOrdered);
+        }
         
         
         
