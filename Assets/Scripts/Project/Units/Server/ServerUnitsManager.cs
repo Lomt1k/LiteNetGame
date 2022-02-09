@@ -35,6 +35,13 @@ namespace Project.Units.Server
             observationManager.RegisterUnit(unit);
             ServerSending_Units.SendCreateControllableUnitForPlayer(player, position, rotation);
         }
+
+        public void DestroyPlayerUnit(ServerUnit unit)
+        {
+            observationManager.UnregisterUnit(unit);
+            _units[unit.player.playerId] = null;
+            Object.Destroy(unit.gameObject);
+        }
         
         
     }

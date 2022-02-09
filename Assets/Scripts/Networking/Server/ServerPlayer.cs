@@ -21,6 +21,14 @@ namespace Networking.Server
             this.unit = unit;
         }
 
+        public void OnDisconnect()
+        {
+            if (unit != null)
+            {
+                GameServer.instance.unitsManager.DestroyPlayerUnit(unit);
+            }
+        }
+
         
     }
 }

@@ -78,7 +78,6 @@ namespace Networking.Server.Observing
                 await Task.Run(RefreshObserversWithoutUnit);
                 Debug.Log($"Another observers Refreshed | cycle time ms {_stopwatch.ElapsedMilliseconds}");
 
-                _stopwatch.Stop();
                 var cycleWorkTime = _stopwatch.ElapsedMilliseconds;
                 if (cycleWorkTime < observingFrequencyInMilliseconds)
                 {
