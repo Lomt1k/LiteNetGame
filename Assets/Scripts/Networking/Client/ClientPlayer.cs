@@ -1,5 +1,4 @@
-﻿
-using Project.UI.Windows.PlayersTabWindow;
+﻿using Project.UI.Windows.PlayersTabWindow;
 using Project.Units.Client;
 
 namespace Networking.Client
@@ -24,6 +23,14 @@ namespace Networking.Client
         public void SetupUnit(ClientUnit unit)
         {
             this.unit = unit;
+        }
+
+        public void OnDisconnect()
+        {
+            if (unit != null)
+            {
+                UnityEngine.Object.Destroy(unit.gameObject);
+            }
         }
         
         

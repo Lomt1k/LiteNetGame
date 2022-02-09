@@ -38,6 +38,7 @@ namespace Networking.Client
             if (_players[playerId] == null)
                 return;
 
+            _players[playerId].OnDisconnect();
             _players[playerId] = null;
             playersOnline--;
         }
