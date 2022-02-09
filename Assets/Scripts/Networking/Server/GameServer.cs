@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using Networking.Server.Observing;
 using Project.Units.Server;
 using UnityEngine;
 
@@ -13,9 +14,10 @@ namespace Networking.Server
         private ServerPacketSender _packetSender;
         private ServerPacketReceiver _packetReceiver;
 
+        public ServerPacketSender sender => _packetSender;
         public ServerPlayers players { get; private set; }
         public ServerUnitsManager unitsManager { get; private set; }
-        public ServerPacketSender sender => _packetSender;
+        public ObservationManager observationManager { get; private set; }
 
         public bool isRunning => _netManager != null && _netManager.IsRunning;
 
@@ -28,6 +30,7 @@ namespace Networking.Server
         {
             players = new ServerPlayers(maxPlayers);
             unitsManager = new ServerUnitsManager(maxPlayers);
+            observationManager = new ObservationManager();
             _netManager = new NetManager(this)
             {
                 BroadcastReceiveEnabled = true,

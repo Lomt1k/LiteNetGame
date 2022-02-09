@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Networking.Client;
-using Networking.Server;
+﻿using Networking.Server;
+using Networking.Server.Observing;
 using UnityEngine;
 
 namespace Project.Units.Server
@@ -13,8 +11,9 @@ namespace Project.Units.Server
         private readonly GameObject unitPrefab;
         
         private static ServerPlayers players => GameServer.instance.players;
+        private static ObservationManager observationManager => GameServer.instance.observationManager;
         
-        private ServerUnit[] _units;
+        private readonly ServerUnit[] _units;
 
         public ServerUnitsManager(int maxPlayers)
         {
@@ -31,7 +30,9 @@ namespace Project.Units.Server
             var unit = Object.Instantiate(unitPrefab, position, rotation).GetComponent<ServerUnit>();
             unit.Initialize(player);
             player.SetupUnit(unit);
-            
+
+            _units[player.playerId] = unit;
+            observationManager.RegisterUnit(unit);
             ServerSending_Units.SendCreateControllableUnitForPlayer(player, position, rotation);
         }
         
