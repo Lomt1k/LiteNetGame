@@ -161,6 +161,7 @@ namespace Networking.Server.Observing
             }
             catch (NullReferenceException ex)
             {
+                Debug.LogWarning($"catched NullRef: RefreshObservingBetweenUnits | " + ex.Message);
             }
             catch (Exception ex)
             {
@@ -195,6 +196,7 @@ namespace Networking.Server.Observing
             }
             catch (NullReferenceException ex)
             {
+                Debug.LogWarning($"catched NullRef: RefreshObjectObservingStatus | " + ex.Message);
             }
             catch (Exception ex)
             {

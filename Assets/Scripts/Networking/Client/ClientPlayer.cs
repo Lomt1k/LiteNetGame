@@ -25,7 +25,7 @@ namespace Networking.Client
             this.unit = unit;
         }
 
-        public void OnDisconnect()
+        public override void OnDisconnect()
         {
             if (unit != null)
             {
