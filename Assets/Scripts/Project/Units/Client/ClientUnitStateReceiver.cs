@@ -24,6 +24,7 @@ namespace Project.Units
             _transform = unit.transform;
             _unit = unit as ClientUnit;
             _isMine = _unit.isMine;
+            ResetInterpolation();
         }
 
         public void UpdateUnitState(UpdateUnitStatePacket packet)
@@ -33,6 +34,12 @@ namespace Project.Units
                 _lastReceivedPacketId = packet.packetId;
                 ApplyUnitStateChanges(packet);
             }
+        }
+
+        public void ResetInterpolation()
+        {
+            _realPos = _startPos = _transform.position;
+            _realRot = _startRot = _transform.rotation;
         }
         
         private bool IsNewestPacket(ushort packetId)
@@ -66,12 +73,15 @@ namespace Project.Units
 
         private void TransformInterpolationProgress()
         {
-            _currentSyncTime += Time.unscaledDeltaTime;
-            var progress = _currentSyncTime / _lastPacketDelay;
-            _transform.position = Vector3.Lerp(_startPos, _realPos, progress);
-            _transform.rotation = !IsBadQuaternion(_realRot)
-                ? Quaternion.Lerp(_startRot, _realRot, progress)
-                : _realRot;
+            if (_currentSyncTime < _lastPacketDelay)
+            {
+                _currentSyncTime += Time.unscaledDeltaTime;
+                var progress = _currentSyncTime / _lastPacketDelay;
+                _transform.position = Vector3.Lerp(_startPos, _realPos, progress);
+                _transform.rotation = !IsBadQuaternion(_realRot)
+                    ? Quaternion.Lerp(_startRot, _realRot, progress)
+                    : _realRot;
+            }
         }
 
         private static bool IsBadQuaternion(Quaternion q)
