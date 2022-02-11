@@ -56,8 +56,7 @@ namespace Project.Units.Client
         public static void RemoveObservingUnit(RemoveObservingUnitPacket packet, NetPeer peer)
         {
             var player = players[packet.playerId];
-            var unit = player.unit;
-            Object.Destroy(unit);
+            Object.Destroy(player.unit.gameObject);
         }
 
         public static void UpdateUnitState(UpdateUnitStatePacket packet, NetPeer peer)

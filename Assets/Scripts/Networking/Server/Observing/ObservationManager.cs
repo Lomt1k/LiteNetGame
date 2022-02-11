@@ -17,7 +17,7 @@ namespace Networking.Server.Observing
     public class ObservationManager
     {
         public const int observingFrequencyInMilliseconds = 1000;
-        public const float observationDistance = 15f; //for test
+        public const float observationDistance = 30f; //for test
 
         private List<ServerUnit> _units = new List<ServerUnit>();
         private List<IObserver> _observersWithoutUnits = new List<IObserver>();
