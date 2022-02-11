@@ -1,5 +1,6 @@
 ﻿using LiteNetLib;
 using Networking.Server;
+using Project.Units.Client.Packets;
 using UnityEngine;
 
 namespace Project.Units.Server
@@ -34,11 +35,23 @@ namespace Project.Units.Server
 
         public static void SendRemoveObservingUnit(NetPeer observerPeer, ServerUnit unit)
         {
-            var packet = new RemoveObservingUnitPacket()
+            var packet = new RemoveObservingUnitPacket
             {
                 playerId = (ushort)unit.player.playerId
             };
             sender.SendPacket(observerPeer, packet, DeliveryMethod.ReliableOrdered);
+        }
+
+        public static void SendUpdateUnitState(NetPeer observerPeer, ServerUnit unit, UpdateMineUnitStatePacket packetFrom)
+        {
+            var packet = new UpdateUnitStatePacket
+            {
+                playerId = (ushort) unit.player.playerId,
+                packetId = packetFrom.packetId,
+                position = packetFrom.position,
+                rotation = packetFrom.rotation
+            };
+            sender.SendPacket(observerPeer, packet, DeliveryMethod.Unreliable);
         }
         
         

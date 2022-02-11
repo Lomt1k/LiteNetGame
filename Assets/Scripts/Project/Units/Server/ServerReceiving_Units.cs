@@ -2,7 +2,6 @@
 using LiteNetLib.Utils;
 using Networking.Server;
 using Project.Units.Client.Packets;
-using UnityEngine;
 
 namespace Project.Units.Server
 {
@@ -30,12 +29,8 @@ namespace Project.Units.Server
 
         private static void OnUnitStateUpdate(UpdateMineUnitStatePacket packet, NetPeer peer)
         {
-            Debug.Log($"OnUnitStateUpdate #{packet.packetId}");
             var sender = players[peer.Id];
-            if (sender == null || sender.unit == null)
-                return;
-            
-            sender.unit.unitStateReceiver.OnReceiveNewData(packet);
+            sender?.unit?.unitStateReceiver.OnReceiveNewData(packet);
         }
 
 

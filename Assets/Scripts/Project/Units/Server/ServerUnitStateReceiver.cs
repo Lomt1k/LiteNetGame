@@ -1,4 +1,5 @@
 ﻿using Project.Units.Client.Packets;
+using Project.Units.Server;
 using UnityEngine;
 
 namespace Project.Units
@@ -7,11 +8,13 @@ namespace Project.Units
     {
         private Transform _transform;
         private ushort _lastReceivedPacketId;
+        private ServerUnit _unit;
 
         public override void Initialize(UnitBase unit)
         {
             base.Initialize(unit);
             _transform = unit.transform;
+            _unit = unit as ServerUnit;
         }
 
         public void OnReceiveNewData(UpdateMineUnitStatePacket packet)
@@ -34,6 +37,19 @@ namespace Project.Units
         {
             _transform.position = packet.position;
             _transform.rotation = packet.rotation;
+
+            SendStateChangesToObservers(packet);
+        }
+
+        private void SendStateChangesToObservers(UpdateMineUnitStatePacket packet)
+        {
+            foreach (var observer in _unit.observers)
+            {
+                if (observer == null)
+                    continue;
+                
+                ServerSending_Units.SendUpdateUnitState(observer.peer, _unit, packet);
+            }
         }
         
         

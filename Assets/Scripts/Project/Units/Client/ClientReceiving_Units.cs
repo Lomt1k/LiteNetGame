@@ -32,6 +32,7 @@ namespace Project.Units.Client
             packetProcessor.SubscribeReusable<CreateContollableUnitPacket, NetPeer>(CreateLocalControllableUnit);
             packetProcessor.SubscribeReusable<AddObservingUnitPacket, NetPeer>(AddObservingUnit);
             packetProcessor.SubscribeReusable<RemoveObservingUnitPacket, NetPeer>(RemoveObservingUnit);
+            packetProcessor.SubscribeReusable<UpdateUnitStatePacket, NetPeer>(UpdateUnitState);
         }
 
         public static void CreateLocalControllableUnit(CreateContollableUnitPacket packet, NetPeer peer)
@@ -57,6 +58,12 @@ namespace Project.Units.Client
             var player = players[packet.playerId];
             var unit = player.unit;
             Object.Destroy(unit);
+        }
+
+        public static void UpdateUnitState(UpdateUnitStatePacket packet, NetPeer peer)
+        {
+            var player = players[packet.playerId];
+            player?.unit?.unitStateReceiver.UpdateUnitState(packet);
         }
         
     }

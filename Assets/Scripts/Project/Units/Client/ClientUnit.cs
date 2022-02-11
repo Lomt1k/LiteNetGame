@@ -7,6 +7,7 @@ namespace Project.Units.Client
     {
         public ClientPlayer player { get; private set; }
         public bool isMine { get; private set; }
+        public ClientUnitStateReceiver unitStateReceiver { get; private set; }
         
         public void Initialize(ClientPlayer ownerPlayer)
         {
@@ -22,6 +23,8 @@ namespace Project.Units.Client
         public override void AddUnitComponents()
         {
             base.AddUnitComponents();
+            unitStateReceiver = AddUnitComponent<ClientUnitStateReceiver>();
+            
             if (isMine)
             {
                 AddUnitComponent<ClientMineUnitStateSender>();
