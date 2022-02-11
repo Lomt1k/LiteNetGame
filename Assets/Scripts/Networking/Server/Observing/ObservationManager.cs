@@ -132,7 +132,7 @@ namespace Networking.Server.Observing
             {
 
                 bool prevState = unitA.observedObjects.Contains(unitB);
-                bool newState = Vector3.Distance(unitA.transformData.position, unitB.transformData.position) < observationDistance;
+                bool newState = Vector3.Distance(unitA.position, unitB.position) < observationDistance;
 
                 if (newState == prevState)
                     return;

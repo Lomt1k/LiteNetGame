@@ -2,6 +2,7 @@
 using LiteNetLib.Utils;
 using Networking.Server;
 using Project.Units.Client.Packets;
+using UnityEngine;
 
 namespace Project.Units.Server
 {
@@ -13,6 +14,7 @@ namespace Project.Units.Server
         public static void SubscribeToReceivedPackets(NetPacketProcessor packetProcessor)
         {
             packetProcessor.SubscribeReusable<RequestCreateMineUnitPacket, NetPeer>(OnRequestCreateUnit);
+            packetProcessor.SubscribeReusable<UpdateMineUnitStatePacket, NetPeer>(OnUnitStateUpdate);
         }
 
         private static void OnRequestCreateUnit(RequestCreateMineUnitPacket packet, NetPeer peer)
@@ -25,7 +27,17 @@ namespace Project.Units.Server
             
             unitsManager.CreateUnitForPlayer(sender);
         }
-        
+
+        private static void OnUnitStateUpdate(UpdateMineUnitStatePacket packet, NetPeer peer)
+        {
+            Debug.Log($"OnUnitStateUpdate #{packet.packetId}");
+            var sender = players[peer.Id];
+            if (sender == null || sender.unit == null)
+                return;
+            
+            sender.unit.unitStateReceiver.OnReceiveNewData(packet);
+        }
+
 
     }
 }

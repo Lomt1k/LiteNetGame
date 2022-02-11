@@ -17,12 +17,13 @@ namespace Project.Units.Server
     {
         public ServerPlayer player { get; private set; }
         public NetPeer peer { get; private set; }
-        public Vector3 position { get; private set; }
+        public Vector3 position => transformData.position;
         public List<IObservableObject> observedObjects { get; } = new List<IObservableObject>();
         public List<IObserver> observers { get; } = new List<IObserver>();
 
         public Transform transformN { get; private set; }
         public TransformData transformData { get; private set; }
+        public ServerUnitStateReceiver unitStateReceiver { get; private set; }
         
         public void Initialize(ServerPlayer ownerPlayer)
         {
@@ -40,6 +41,12 @@ namespace Project.Units.Server
             #if UNITY_EDITOR
             name = $"ServerUnit [ID {ownerPlayer.playerId}]: {ownerPlayer.nickname}";
             #endif
+        }
+
+        public override void AddUnitComponents()
+        {
+            base.AddUnitComponents();
+            unitStateReceiver = AddUnitComponent<ServerUnitStateReceiver>();
         }
 
         public void OnAddObserver(IObserver observer)

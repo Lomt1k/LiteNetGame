@@ -18,6 +18,15 @@ namespace Project.Units.Client
             name = isMine ? "MineUnit" : $"ClientUnit [ID {ownerPlayer.playerId}]: {ownerPlayer.nickname}";
 #endif
         }
+
+        public override void AddUnitComponents()
+        {
+            base.AddUnitComponents();
+            if (isMine)
+            {
+                AddUnitComponent<ClientMineUnitStateSender>();
+            }
+        }
         
         
         
