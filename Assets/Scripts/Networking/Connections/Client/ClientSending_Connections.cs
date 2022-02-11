@@ -1,8 +1,10 @@
 ﻿using LiteNetLib;
+using Networking.Client;
+using Networking.Connections.Client.Packets;
 
-namespace Networking.Client.Sending
+
+namespace Networking.Connections.Client
 {
-    using Packets.Connections;
     
     public static class ClientSending_Connections
     {

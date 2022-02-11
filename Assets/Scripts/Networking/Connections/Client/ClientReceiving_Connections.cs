@@ -1,13 +1,13 @@
 ﻿using LiteNetLib;
 using LiteNetLib.Utils;
+using Networking.Client;
+using Networking.Connections.Server.Packets;
 using Project.UI.Windows.TextChatWindow;
-using UnityEngine;
-using Networking.Server.Sending.Packets.Connections;
 using Project.Scenes;
 using Project.UI.Windows;
 using Project.UI.Windows.PlayersTabWindow;
 
-namespace Networking.Client.Receiving
+namespace Networking.Connections.Client
 {
     public static class ClientReceiving_Connections
     {

@@ -1,6 +1,6 @@
-﻿
-namespace Networking.Server.Sending.Packets.Connections
+﻿namespace Networking.Connections.Server.Packets
 {
+    using DataTypes;
     
     public class AfterJoinInfoPacket : ServerPacket
     {

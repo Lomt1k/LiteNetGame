@@ -1,9 +1,10 @@
 ﻿using LiteNetLib;
+using Networking.Connections.Server.Packets;
+using Networking.Connections.DataTypes;
+using Networking.Server;
 
-namespace Networking.Server.Sending
+namespace Networking.Connections.Server
 {
-    using Packets.Connections;
-    
     public static class ServerSending_Connections
     {
         private static ServerPacketSender sender => GameServer.instance.sender;

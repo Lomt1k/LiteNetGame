@@ -47,7 +47,7 @@ namespace Networking.Client
         private void InitializePacketProcessor()
         {
             var packetProcessor = new NetPacketProcessor();
-            NetDataExtensions.RegisterDataTypes(packetProcessor);
+            SendalbeDataTypes.NetDataExtensions.RegisterDataTypes(packetProcessor);
             _packetSender = new ClientPacketSender(_netManager, packetProcessor);
             _packetReceiver = new ClientPacketReceiver(packetProcessor);
         }
@@ -90,7 +90,7 @@ namespace Networking.Client
         public void OnPeerConnected(NetPeer peer)
         {
             _server = peer;
-            ClientSending_Connections.SendJoinToServer(_nicknameForConnection);
+            Connections.Client.ClientSending_Connections.SendJoinToServer(_nicknameForConnection);
         }
 
         public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)

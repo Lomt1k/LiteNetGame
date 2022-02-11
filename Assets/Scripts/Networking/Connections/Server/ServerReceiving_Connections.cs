@@ -1,9 +1,10 @@
 ﻿using LiteNetLib;
 using LiteNetLib.Utils;
 using UnityEngine;
-using Networking.Client.Sending.Packets.Connections;
+using Networking.Server;
+using Networking.Connections.Client.Packets;
 
-namespace Networking.Server.Receiving
+namespace Networking.Connections.Server
 {
     public static class ServerReceiving_Connections
     {
@@ -22,9 +23,9 @@ namespace Networking.Server.Receiving
             
             Debug.Log($"ServerReceiving :: OnPlayerJoinedToServer {packet.nickname} (ID {peer.Id})");
             var newPlayer = GameServer.instance.players.CreatePlayer(peer, packet.nickname);
-            Sending.ServerSending_Connections.SendInfoAboutAllConnections(newPlayer);
+            ServerSending_Connections.SendInfoAboutAllConnections(newPlayer);
             
-            Sending.ServerSending_Connections.SendNewConnectionInfoToAll(newPlayer);
+            ServerSending_Connections.SendNewConnectionInfoToAll(newPlayer);
         }
 
         private static void OnRequestPlayerPings(RequestPlayerPingsPacket packet, NetPeer peer)
@@ -33,7 +34,7 @@ namespace Networking.Server.Receiving
             if (senderPlayer == null)
                 return;
             
-            Sending.ServerSending_Connections.SendAllPlayersPingInfo(senderPlayer);
+            ServerSending_Connections.SendAllPlayersPingInfo(senderPlayer);
         }
         
         

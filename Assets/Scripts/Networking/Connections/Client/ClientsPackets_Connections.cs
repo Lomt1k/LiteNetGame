@@ -1,4 +1,4 @@
-﻿namespace Networking.Client.Sending.Packets.Connections
+﻿namespace Networking.Connections.Client.Packets
 {
     public class JoinToServerPacket : ClientPacket
     {

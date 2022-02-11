@@ -46,7 +46,7 @@ namespace Networking.Server
         private void InitializePacketProcessor()
         {
             var packetProcessor = new NetPacketProcessor();
-            NetDataExtensions.RegisterDataTypes(packetProcessor);
+            SendalbeDataTypes.NetDataExtensions.RegisterDataTypes(packetProcessor);
             _packetSender = new ServerPacketSender(_netManager, packetProcessor);
             _packetReceiver = new ServerPacketReceiver(packetProcessor);
         }
@@ -68,7 +68,7 @@ namespace Networking.Server
             if (disconnectedPlayer == null)
                 return;
 
-            Sending.ServerSending_Connections.SendPlayerDisconnectInfoToAll(disconnectedPlayer);
+            Connections.Server.ServerSending_Connections.SendPlayerDisconnectInfoToAll(disconnectedPlayer);
             players.RemovePlayer(peer);
         }
 

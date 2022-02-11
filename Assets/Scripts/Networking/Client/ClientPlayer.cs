@@ -1,4 +1,5 @@
-﻿using Project.UI.Windows.PlayersTabWindow;
+﻿using Networking.Connections.DataTypes;
+using Project.UI.Windows.PlayersTabWindow;
 using Project.Units.Client;
 
 namespace Networking.Client

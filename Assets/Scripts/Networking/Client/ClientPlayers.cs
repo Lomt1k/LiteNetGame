@@ -1,4 +1,5 @@
-﻿
+﻿using Networking.Connections.DataTypes;
+
 namespace Networking.Client
 {
     public class ClientPlayers
