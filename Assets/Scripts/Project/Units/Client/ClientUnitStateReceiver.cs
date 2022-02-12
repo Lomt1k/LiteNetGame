@@ -9,6 +9,8 @@ namespace Project.Units
         private ushort _lastReceivedPacketId;
         private float _lastReceivedPacketTime;
         private float _lerpProgress;
+        private float _averageLerp = ClientMineUnitStateSender.sendRate;
+        private float _lastPacketDelay;
         private Vector3 _startPos;
         private Vector3 _realPos;
         private Quaternion _startRot;
@@ -57,6 +59,13 @@ namespace Project.Units
         private void ApplyUnitStateChanges(UpdateUnitStatePacket packet)
         {
             _lastReceivedPacketTime = Time.unscaledTime;
+            _lastPacketDelay = Time.unscaledTime - _lastPacketDelay;
+            if (_lastPacketDelay > 0.25f)
+            {
+                _lastPacketDelay = ClientMineUnitStateSender.sendRate;
+            }
+
+            _averageLerp = (_averageLerp + _lastPacketDelay) / 2;
             StartTransformInterpolation(packet.position, packet.rotation);
             DataTypes.NetDataTypes_Units.ApplyStateInfoToUnit(packet.stateInfo, _unit);
         }
@@ -82,7 +91,7 @@ namespace Project.Units
         {
             if (_lerpProgress < 1f)
             {
-                _lerpProgress = (Time.unscaledTime - _lastReceivedPacketTime) / ClientMineUnitStateSender.sendRate;
+                _lerpProgress = (Time.unscaledTime - _lastReceivedPacketTime) / _averageLerp;
                 _transform.position = Vector3.Lerp(_startPos, _realPos, _lerpProgress);
                 _transform.rotation = !IsBadQuaternion(_realRot)
                     ? Quaternion.Lerp(_startRot, _realRot, _lerpProgress)
