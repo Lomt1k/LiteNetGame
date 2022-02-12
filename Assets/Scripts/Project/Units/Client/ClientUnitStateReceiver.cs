@@ -8,8 +8,7 @@ namespace Project.Units
     {
         private ushort _lastReceivedPacketId;
         private float _lastReceivedPacketTime;
-        private float _lastPacketDelay;
-        private float _currentSyncTime;
+        private float _lerpProgress;
         private Vector3 _startPos;
         private Vector3 _realPos;
         private Quaternion _startRot;
@@ -49,7 +48,6 @@ namespace Project.Units
 
         private void ApplyUnitStateChanges(UpdateUnitStatePacket packet)
         {
-            _lastPacketDelay = Mathf.Clamp(Time.unscaledTime - _lastReceivedPacketTime, 0f, 0.5f);
             _lastReceivedPacketTime = Time.unscaledTime;
             StartTransformInterpolation(packet.position, packet.rotation);
             DataTypes.NetDataTypes_Units.ApplyStateInfoToUnit(packet.stateInfo, _unit);
@@ -57,7 +55,7 @@ namespace Project.Units
 
         private void StartTransformInterpolation(Vector3 pos, Quaternion rot)
         {
-            _currentSyncTime = 0f;
+            _lerpProgress = 0f;
             _startPos = _transform.position;
             _startRot = _transform.rotation;
             _realPos = pos;
@@ -74,13 +72,12 @@ namespace Project.Units
 
         private void TransformInterpolationProgress()
         {
-            if (_currentSyncTime < _lastPacketDelay)
+            if (_lerpProgress < 1f)
             {
-                _currentSyncTime += Time.unscaledDeltaTime;
-                var progress = _currentSyncTime / _lastPacketDelay;
-                _transform.position = Vector3.Lerp(_startPos, _realPos, progress);
+                _lerpProgress = (Time.unscaledTime - _lastReceivedPacketTime) / ClientMineUnitStateSender.sendRate;
+                _transform.position = Vector3.Lerp(_startPos, _realPos, _lerpProgress);
                 _transform.rotation = !IsBadQuaternion(_realRot)
-                    ? Quaternion.Lerp(_startRot, _realRot, progress)
+                    ? Quaternion.Lerp(_startRot, _realRot, _lerpProgress)
                     : _realRot;
             }
         }
