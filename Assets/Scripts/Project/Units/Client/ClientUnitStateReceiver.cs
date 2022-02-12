@@ -9,6 +9,7 @@ namespace Project.Units
         private ushort _lastReceivedPacketId;
         private float _lastReceivedPacketTime;
         private float _lerpProgress;
+        private float _lastPacketDelay;
         private Vector3 _startPos;
         private Vector3 _realPos;
         private Quaternion _startRot;
@@ -17,6 +18,8 @@ namespace Project.Units
         private ClientUnit _unit;
         private bool _isMine;
 
+        private int packetsCounter;
+
         public override void Initialize(UnitBase unit)
         {
             base.Initialize(unit);
@@ -24,13 +27,19 @@ namespace Project.Units
             _unit = unit as ClientUnit;
             _isMine = _unit.isMine;
             ResetInterpolation();
+            
+            if (!_isMine)
+                InvokeRepeating(nameof(SecUpdate), 1f, 1f);
         }
 
         public void UpdateUnitState(UpdateUnitStatePacket packet)
         {
+            
             if (IsNewestPacket(packet.packetId))
             {
+                packetsCounter++;
                 _lastReceivedPacketId = packet.packetId;
+                //Debug.Log($"PacketId: {_lastReceivedPacketId} | delay: {Time.unscaledTime - _lastReceivedPacketTime}");
                 ApplyUnitStateChanges(packet);
             }
         }
@@ -48,6 +57,11 @@ namespace Project.Units
 
         private void ApplyUnitStateChanges(UpdateUnitStatePacket packet)
         {
+            _lastPacketDelay = Time.unscaledTime - _lastReceivedPacketTime;
+            if (_lastPacketDelay > 1f || _lastPacketDelay < ClientMineUnitStateSender.sendRate)
+            {
+                _lastPacketDelay = ClientMineUnitStateSender.sendRate;
+            }
             _lastReceivedPacketTime = Time.unscaledTime;
             StartTransformInterpolation(packet.position, packet.rotation);
             DataTypes.NetDataTypes_Units.ApplyStateInfoToUnit(packet.stateInfo, _unit);
@@ -74,7 +88,7 @@ namespace Project.Units
         {
             if (_lerpProgress < 1f)
             {
-                _lerpProgress = (Time.unscaledTime - _lastReceivedPacketTime) / ClientMineUnitStateSender.sendRate;
+                _lerpProgress = (Time.unscaledTime - _lastReceivedPacketTime) / _lastPacketDelay;
                 _transform.position = Vector3.Lerp(_startPos, _realPos, _lerpProgress);
                 _transform.rotation = !IsBadQuaternion(_realRot)
                     ? Quaternion.Lerp(_startRot, _realRot, _lerpProgress)
@@ -85,6 +99,12 @@ namespace Project.Units
         private static bool IsBadQuaternion(Quaternion q)
         {
             return q.x == 0.0 && q.y == 0 && q.z == 0 && q.w == 0;
+        }
+
+        private void SecUpdate()
+        {
+            Debug.Log($"packets per second: {packetsCounter}");
+            packetsCounter = 0;
         }
         
         

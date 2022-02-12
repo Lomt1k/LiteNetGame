@@ -5,7 +5,7 @@ namespace Project.Units.Client
 {
     public class ClientMineUnitStateSender : UnitComponent
     {
-        public const float sendRate = 0.05f;
+        public const float sendRate = 0.04f;
         public const float minFloatChangeSync = 0.01f;
 
         private ClientUnit _clientUnit;
