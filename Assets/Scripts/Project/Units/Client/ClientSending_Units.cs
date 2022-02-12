@@ -1,5 +1,6 @@
 ﻿using LiteNetLib;
 using Networking.Client;
+using Project.Units.DataTypes;
 using UnityEngine;
 
 namespace Project.Units.Client
@@ -17,14 +18,15 @@ namespace Project.Units.Client
             sender.SendPacket(new RequestCreateMineUnitPacket(), DeliveryMethod.ReliableOrdered);
         }
 
-        public static void SendMineUnitStateUpdate(Vector3 position, Quaternion rotation)
+        public static void SendMineUnitStateUpdate(Vector3 position, Quaternion rotation, UnitStateInfo stateInfo)
         {
             lastUnitStateUpdatePacketId++;
             var packet = new UpdateMineUnitStatePacket
             {
                 packetId = lastUnitStateUpdatePacketId,
                 position = position,
-                rotation = rotation
+                rotation = rotation,
+                stateInfo = stateInfo
             };
             sender.SendPacket(packet, DeliveryMethod.Unreliable);
         }

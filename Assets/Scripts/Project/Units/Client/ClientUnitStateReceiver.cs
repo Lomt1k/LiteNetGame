@@ -52,6 +52,7 @@ namespace Project.Units
             _lastPacketDelay = Mathf.Clamp(Time.unscaledTime - _lastReceivedPacketTime, 0f, 0.5f);
             _lastReceivedPacketTime = Time.unscaledTime;
             StartTransformInterpolation(packet.position, packet.rotation);
+            DataTypes.NetDataTypes_Units.ApplyStateInfoToUnit(packet.stateInfo, _unit);
         }
 
         private void StartTransformInterpolation(Vector3 pos, Quaternion rot)

@@ -28,7 +28,8 @@ namespace Project.Units.Server
             {
                 playerId = (ushort) unit.player.playerId,
                 position = unit.transformData.position,
-                rotation = unit.transformData.rotation
+                rotation = unit.transformData.rotation,
+                stateInfo = unit.unitStateReceiver.currentStateInfo
             };
             sender.SendPacket(observerPeer, packet, DeliveryMethod.ReliableOrdered);
         }
@@ -49,7 +50,8 @@ namespace Project.Units.Server
                 playerId = (ushort) unit.player.playerId,
                 packetId = packetFrom.packetId,
                 position = packetFrom.position,
-                rotation = packetFrom.rotation
+                rotation = packetFrom.rotation,
+                stateInfo = packetFrom.stateInfo
             };
             sender.SendPacket(observerPeer, packet, DeliveryMethod.Unreliable);
         }

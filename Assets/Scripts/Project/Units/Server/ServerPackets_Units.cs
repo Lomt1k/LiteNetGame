@@ -1,4 +1,5 @@
 ﻿using Networking;
+using Project.Units.DataTypes;
 using UnityEngine;
 
 namespace Project.Units.Server.Packets
@@ -14,6 +15,7 @@ namespace Project.Units.Server.Packets
         public ushort playerId { get; set; }
         public Vector3 position { get; set; }
         public Quaternion rotation { get; set; }
+        public UnitStateInfo stateInfo { get; set; }
     }
 
     public class RemoveObservingUnitPacket : ServerPacket
@@ -27,6 +29,7 @@ namespace Project.Units.Server.Packets
         public ushort packetId { get; set; }
         public Vector3 position { get; set; }
         public Quaternion rotation { get; set; }
+        public UnitStateInfo stateInfo { get; set; }
     }
     
     

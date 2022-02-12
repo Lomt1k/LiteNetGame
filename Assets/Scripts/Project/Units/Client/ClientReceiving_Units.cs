@@ -50,6 +50,7 @@ namespace Project.Units.Client
             var unit = Object.Instantiate(prefab, packet.position, packet.rotation).GetComponent<ClientUnit>();
             var unitOwner = players[packet.playerId];
             unit.Initialize(unitOwner);
+            DataTypes.NetDataTypes_Units.ApplyStateInfoToUnit(packet.stateInfo, unit);
             unitOwner.SetupUnit(unit);
         }
 

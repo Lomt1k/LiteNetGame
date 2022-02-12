@@ -9,6 +9,7 @@ namespace Networking.SendalbeDataTypes
         {
             NetDataTypes_UnityEngine.RegisterDataTypes(pc);
             Connections.DataTypes.NetDataTypes_Connections.RegisterDataTypes(pc);
+            Project.Units.DataTypes.NetDataTypes_Units.RegisterDataTypes(pc);
         }
         
         
