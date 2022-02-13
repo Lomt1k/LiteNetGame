@@ -1,4 +1,5 @@
-﻿
+﻿using Networking.Connections.DataTypes;
+
 namespace Networking.Client
 {
     public class ClientPlayers
@@ -38,6 +39,7 @@ namespace Networking.Client
             if (_players[playerId] == null)
                 return;
 
+            _players[playerId].OnDisconnect();
             _players[playerId] = null;
             playersOnline--;
         }

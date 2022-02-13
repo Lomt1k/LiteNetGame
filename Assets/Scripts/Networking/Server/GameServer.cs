@@ -2,6 +2,8 @@
 using System.Net.Sockets;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using Networking.Server.Observing;
+using Project.Units.Server;
 using UnityEngine;
 
 namespace Networking.Server
@@ -12,8 +14,10 @@ namespace Networking.Server
         private ServerPacketSender _packetSender;
         private ServerPacketReceiver _packetReceiver;
 
-        public ServerPlayers players { get; private set; }
         public ServerPacketSender sender => _packetSender;
+        public ServerPlayers players { get; private set; }
+        public ServerUnitsManager unitsManager { get; private set; }
+        public ObservationManager observationManager { get; private set; }
 
         public bool isRunning => _netManager != null && _netManager.IsRunning;
 
@@ -25,6 +29,8 @@ namespace Networking.Server
         public void StartServer(int port, int maxPlayers)
         {
             players = new ServerPlayers(maxPlayers);
+            unitsManager = new ServerUnitsManager(maxPlayers);
+            observationManager = new ObservationManager();
             _netManager = new NetManager(this)
             {
                 BroadcastReceiveEnabled = true,
@@ -40,7 +46,7 @@ namespace Networking.Server
         private void InitializePacketProcessor()
         {
             var packetProcessor = new NetPacketProcessor();
-            NetDataExtensions.RegisterDataTypes(packetProcessor);
+            SendalbeDataTypes.NetDataExtensions.RegisterDataTypes(packetProcessor);
             _packetSender = new ServerPacketSender(_netManager, packetProcessor);
             _packetReceiver = new ServerPacketReceiver(packetProcessor);
         }
@@ -62,7 +68,7 @@ namespace Networking.Server
             if (disconnectedPlayer == null)
                 return;
 
-            Sending.ServerSending_Connections.SendPlayerDisconnectInfoToAll(disconnectedPlayer);
+            Connections.Server.ServerSending_Connections.SendPlayerDisconnectInfoToAll(disconnectedPlayer);
             players.RemovePlayer(peer);
         }
 

@@ -22,8 +22,10 @@ namespace Networking.Client
 
         private void SubscribeToReceivedPackets()
         {
-            ClientReceiving_Connections.SubscribeToReceivedPackets(_packetProcessor);
+            Connections.Client.ClientReceiving_Connections.SubscribeToReceivedPackets(_packetProcessor);
             ClientReceiving_TextChat.SubscribeToReceivedPackets(_packetProcessor);
+            
+            Project.Units.Client.ClientReceiving_Units.SubscribeToReceivedPackets(_packetProcessor);
         }
         
         
