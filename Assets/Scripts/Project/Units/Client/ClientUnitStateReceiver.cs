@@ -1,4 +1,6 @@
-﻿using Project.Units.Client;
+﻿using Networking;
+using Networking.Server;
+using Project.Units.Client;
 using Project.Units.Server.Packets;
 using UnityEngine;
 
@@ -9,7 +11,7 @@ namespace Project.Units
         private ushort _lastReceivedPacketId;
         private float _lastReceivedPacketTime;
         private float _lerpProgress;
-        private float _averageLerp = ClientMineUnitStateSender.sendRate;
+        private float _averageLerp;
         private float _lastPacketDelay;
         private Vector3 _startPos;
         private Vector3 _realPos;
@@ -17,9 +19,8 @@ namespace Project.Units
         private Quaternion _realRot;
         private Transform _transform;
         private ClientUnit _unit;
+        private ServerConfig _config;
         private bool _isMine;
-
-        private int packetsCounter;
 
         public override void Initialize(UnitBase unit)
         {
@@ -27,10 +28,9 @@ namespace Project.Units
             _transform = unit.transform;
             _unit = unit as ClientUnit;
             _isMine = _unit.isMine;
+            _config = NetInfo.serverConfig;
+            _averageLerp = _config.syncUnitState_rate;
             ResetInterpolation();
-            
-            if (!_isMine)
-                InvokeRepeating(nameof(SecUpdate), 1f, 1f);
         }
 
         public void UpdateUnitState(UpdateUnitStatePacket packet)
@@ -38,7 +38,6 @@ namespace Project.Units
             
             if (IsNewestPacket(packet.packetId))
             {
-                packetsCounter++;
                 _lastReceivedPacketId = packet.packetId;
                 //Debug.Log($"PacketId: {_lastReceivedPacketId} | delay: {Time.unscaledTime - _lastReceivedPacketTime}");
                 ApplyUnitStateChanges(packet);
@@ -62,7 +61,7 @@ namespace Project.Units
             _lastPacketDelay = Time.unscaledTime - _lastPacketDelay;
             if (_lastPacketDelay > 0.25f)
             {
-                _lastPacketDelay = ClientMineUnitStateSender.sendRate;
+                _lastPacketDelay = _config.syncUnitState_rate;
             }
 
             _averageLerp = (_averageLerp + _lastPacketDelay) / 2;
@@ -102,12 +101,6 @@ namespace Project.Units
         private static bool IsBadQuaternion(Quaternion q)
         {
             return q.x == 0.0 && q.y == 0 && q.z == 0 && q.w == 0;
-        }
-
-        private void SecUpdate()
-        {
-            Debug.Log($"packets per second: {packetsCounter}");
-            packetsCounter = 0;
         }
         
         

@@ -1,18 +1,18 @@
-﻿using Project.Units.DataTypes;
+﻿using Networking;
+using Networking.Server;
+using Project.Units.DataTypes;
 using UnityEngine;
 
 namespace Project.Units.Client
 {
     public class ClientMineUnitStateSender : UnitComponent
     {
-        public const float sendRate = 0.04f;
-        public const float minFloatChangeSync = 0.01f;
-
         private ClientUnit _clientUnit;
         private Transform _transform;
         private Vector3 _lastSendedPos;
         private Quaternion _lastSendedRot;
         private UnitStateInfo _lastSendedStateInfo;
+        private ServerConfig _config;
 
         public override void Initialize(UnitBase unit)
         {
@@ -21,7 +21,8 @@ namespace Project.Units.Client
             _transform = unit.transform;
             _lastSendedPos = _transform.position;
             _lastSendedRot = _transform.rotation;
-            InvokeRepeating(nameof(SendUpdate), sendRate, sendRate);
+            _config = NetInfo.serverConfig;
+            InvokeRepeating(nameof(SendUpdate), _config.syncUnitState_rate, _config.syncUnitState_rate);
         }
 
         private void SendUpdate()
@@ -35,9 +36,9 @@ namespace Project.Units.Client
 
         private bool HasAnyStateUpdates(UnitStateInfo stateInfo)
         {
-            return Vector3.Distance(_lastSendedPos, _transform.position) > minFloatChangeSync
+            return Vector3.Distance(_lastSendedPos, _transform.position) > _config.minFloatChangeSync
                    || _lastSendedRot != _transform.rotation
-                   || Mathf.Abs(stateInfo.speed - _lastSendedStateInfo.speed) > minFloatChangeSync
+                   || Mathf.Abs(stateInfo.speed - _lastSendedStateInfo.speed) > _config.minFloatChangeSync
                    || stateInfo.bitArray_0 != _lastSendedStateInfo.bitArray_0;
         }
 
